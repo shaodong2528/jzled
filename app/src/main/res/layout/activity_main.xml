@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#999999"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/close"
+        android:text="Close"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"/>
+    <com.skydoves.colorpickerview.ColorPickerView
+        android:layout_marginStart="500px"
+        android:id="@+id/colorPickerView"
+        android:layout_width="100px"
+        android:layout_height="100px"/>
+    <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
+        android:id="@+id/brightnessSlide"
+        android:layout_marginStart="300px"
+        android:layout_marginTop="150px"
+        android:layout_width="300px"
+        android:layout_height="wrap_content"
+        app:borderColor_BrightnessSlider="#999999"
+        app:selector_BrightnessSlider="@drawable/colorpickerview_wheel"/>
+    <com.skydoves.colorpickerview.sliders.AlphaSlideBar
+        android:id="@+id/alphaSlideBar"
+        android:layout_marginTop="200px"
+        android:layout_marginStart="300px"
+        android:layout_width="300px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:borderColor_AlphaSlideBar="@android:color/darker_gray"
+        app:borderSize_AlphaSlideBar="5"
+        app:selector_AlphaSlideBar="@drawable/colorpickerview_wheel" />
+
+    <TextView
+        android:id="@+id/test1"
+        android:text="TestColor1"
+        android:layout_below="@+id/colorPickerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/test2"
+        android:text="TestColor2"
+        android:layout_below="@+id/test1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/test3"
+        android:text="TestColor3"
+        android:layout_below="@+id/test2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
