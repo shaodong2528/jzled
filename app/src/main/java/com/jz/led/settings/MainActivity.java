@@ -3,6 +3,7 @@ package com.jz.led.settings;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.media.audiofx.Visualizer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.skydoves.colorpickerview.ActionMode;
-import com.skydoves.colorpickerview.ColorEnvelope;
-import com.skydoves.colorpickerview.ColorPickerView;
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
-import com.skydoves.colorpickerview.preference.ColorPickerPreferenceManager;
-import com.skydoves.colorpickerview.sliders.AlphaSlideBar;
-import com.skydoves.colorpickerview.sliders.BrightnessSlideBar;
+import com.jz.led.colorpick.ActionMode;
+import com.jz.led.colorpick.ColorEnvelope;
+import com.jz.led.colorpick.ColorPickerView;
+import com.jz.led.colorpick.listeners.ColorEnvelopeListener;
+import com.jz.led.colorpick.preference.ColorPickerPreferenceManager;
+import com.jz.led.widget.AlphaSlideBar;
+import com.jz.led.widget.BrightnessSlideBar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         // attach brightnessSlideBar
         brightnessSlideBar = findViewById(R.id.brightnessSlide);
         colorPickerView.attachBrightnessSlider(brightnessSlideBar);
-
     }
 
     @Override

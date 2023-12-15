@@ -12,12 +12,12 @@
         android:text="Close"
         android:layout_width="wrap_content"
         android:layout_height="100dp"/>
-    <com.skydoves.colorpickerview.ColorPickerView
+    <com.jz.led.colorpick.ColorPickerView
         android:layout_marginStart="500px"
         android:id="@+id/colorPickerView"
         android:layout_width="100px"
         android:layout_height="100px"/>
-    <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
+    <com.jz.led.widget.BrightnessSlideBar
         android:id="@+id/brightnessSlide"
         android:layout_marginStart="300px"
         android:layout_marginTop="150px"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         app:borderColor_BrightnessSlider="#999999"
         app:selector_BrightnessSlider="@drawable/colorpickerview_wheel"/>
-    <com.skydoves.colorpickerview.sliders.AlphaSlideBar
+    <com.jz.led.widget.AlphaSlideBar
         android:id="@+id/alphaSlideBar"
         android:layout_marginTop="200px"
         android:layout_marginStart="300px"
