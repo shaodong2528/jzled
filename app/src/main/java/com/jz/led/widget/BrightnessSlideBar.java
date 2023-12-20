@@ -20,9 +20,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
+
 import androidx.annotation.ColorInt;
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -81,9 +84,9 @@ public class BrightnessSlideBar extends AbstractSlider {
   protected void updatePaint(Paint colorPaint) {
     float[] hsv = new float[3];
     Color.colorToHSV(getColor(), hsv);
-    hsv[2] = 0;
+    hsv[2] = 0.1f;  //default 0
     int startColor = Color.HSVToColor(hsv);
-    hsv[2] = 1;
+    hsv[2] = 0.95f;  //default 1
     int endColor = Color.HSVToColor(hsv);
     Shader shader =
         new LinearGradient(

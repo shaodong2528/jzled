@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/left_home"
         android:src="@drawable/home_selector"
-        android:layout_width="@dimen/x177"
+        android:layout_width="@dimen/x150"
         android:layout_height="@dimen/x117"/>
     <!--左侧部分-->
     <LinearLayout
@@ -16,7 +16,7 @@
         android:layout_toEndOf="@+id/left_home"
         android:orientation="vertical"
         android:background="@mipmap/left_bg_1920"
-        android:layout_width="@dimen/x805"
+        android:layout_width="@dimen/x605"
         android:layout_height="@dimen/y720">
         <TextView
             android:text="@string/app_name"
@@ -125,9 +125,16 @@
                 android:background="@drawable/minus_selector"
                 android:layout_width="@dimen/x57"
                 android:layout_height="@dimen/x57"/>
-            <com.jz.led.widget.BrightnessSlideBar
-                android:layout_width="@dimen/x578"
-                android:layout_height="@dimen/y30"/>
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="@dimen/x20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.jz.led.widget.BrightnessSlideBar
+                    android:id="@+id/brightnessSlide"
+                    android:layout_width="@dimen/x450"
+                    android:layout_height="@dimen/y30"
+                    app:selector_BrightnessSlider="@drawable/colorpickerview_wheel" />
+            </androidx.cardview.widget.CardView>
             <ImageView
                 android:id="@+id/iv_add"
                 android:background="@drawable/add_selector"

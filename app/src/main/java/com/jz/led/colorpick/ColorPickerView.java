@@ -337,7 +337,7 @@ public class ColorPickerView extends FrameLayout implements LifecycleObserver {
    * notifies color changes to {@link ./ColorListener}, {@link FlagView}. {@link AlphaSlideBar},
    * {@link BrightnessSlideBar} with the debounce duration.
    */
-  private void notifyColorChanged() {
+  public void notifyColorChanged() {
     this.debounceHandler.removeCallbacksAndMessages(null);
     Runnable debounceRunnable =
       () -> {

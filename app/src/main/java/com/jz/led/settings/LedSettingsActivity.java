@@ -62,6 +62,30 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         vCircleSwitchLeftPoint = findViewById(R.id.iv_cycle_point_left);
         vCircleSwitchRightPoint = findViewById(R.id.iv_cycle_point_right);
 
+        colorPickerView = findViewById(R.id.colorPickerView);
+        colorPickerView.setActionMode(ActionMode.LAST); //手指释放回调监听
+        ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
+        int color = manager.getColor("MyColorPicker",0);
+        Point point = manager.getSelectorPosition("savepoint",new Point(100,100));
+        int bright = manager.getBrightnessSliderPosition("savebright",0);
+        Log.d("===zzz","color="+color+",px="+point.x+",py="+point.y+",bright="+bright);
+        colorPickerView.setInitialColor(color);
+        colorPickerView.setColorListener(new ColorEnvelopeListener() {
+            @Override
+            public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
+                if(fromUser){
+                    int color = envelope.getColor();
+                    String hexColor = envelope.getHexCode();
+                    int argb[] = envelope.getArgb();
+                    Log.d("===zzz","fromUser="+fromUser+",color="+color+",hexColor="+hexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]);
+                    vModeName.setTextColor(color);
+                }
+            }
+        });
+        brightnessSlideBar = findViewById(R.id.brightnessSlide);
+        colorPickerView.attachBrightnessSlider(brightnessSlideBar);
+
+
         vModeName = findViewById(R.id.tv_mode_name);
         vModeLay = findViewById(R.id.ll_mode);
         vModeLay.setOnClickListener(this);
@@ -232,22 +256,28 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
 
                 break;
             case R.id.iv_color1:
-
+                colorPickerView.setPureColor(Color.parseColor("#FC2E28")); //红色
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color2:
-
+                colorPickerView.setPureColor(Color.parseColor("#F66202")); //橙色
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color3:
-
+                colorPickerView.setPureColor(Color.parseColor("#F7A002")); //黄色
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color4:
-
+                colorPickerView.setPureColor(Color.parseColor("#2DAE18"));//绿色
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color5:
-
+                colorPickerView.setPureColor(Color.parseColor("#12A3B5"));//蓝色
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color6:
-
+                colorPickerView.setPureColor(Color.parseColor("#3E02F8"));//紫色
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.ll_mode_sing:
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_SING);
@@ -287,5 +317,12 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         vModeList.setVisibility(View.GONE);
         initFocusView();
         vModeLay.requestFocus();
+    }
+
+    @Override
+    protected void onPause() {
+        ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
+        manager.setColor("MyColorPicker", colorPickerView.getColor()); // manipulates the saved color data.
+        super.onPause();
     }
 }
