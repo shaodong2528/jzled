@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.jz.led.settings"
@@ -53,6 +53,15 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs = ['src/main/res','src/1230_720/res',
+                           'src/1920_720/res','src/1920_812/res'
+                          ]
+            java.srcDirs = ['src/main/java']
+        }
     }
 
 }

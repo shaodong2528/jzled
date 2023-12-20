@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jz.led.settings">
 
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
     <application
+        android:name="com.jz.led.MainApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +16,19 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:label="Led"
+            android:theme="@style/Theme.LedProject.NoActionBar">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".LedSettingsActivity"
             android:label="@string/app_name"
+            android:exported="true"
             android:theme="@style/Theme.LedProject.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

@@ -4,10 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/LedProject/app/src/main/res/layout/content_main.xml" value="0.3482789855072464" />
+        <entry key="..\:/LedProject/jzled/app/src/1230_720/res/layout-nodpi/led_settings_activity.xml" value="0.33" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/drawable/add_selector.xml" value="0.1495" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/drawable/circle_selector.xml" value="0.1495" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/drawable/color_item_selector.xml" value="0.181" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/drawable/minus_selector.xml" value="0.1495" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/drawable/mode_item_selector.xml" value="0.181" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/drawable/mode_list_selector.xml" value="0.1495" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/drawable/shape_none.xml" value="0.181" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_720/res/layout-nodpi/land_1920_720_led_settings_activity.xml" value="0.5203883495145631" />
+        <entry key="..\:/LedProject/jzled/app/src/1920_812/res/layout-nodpi/land_1920_812_led_settings_activity.xml" value="0.13958333333333334" />
         <entry key="..\:/LedProject/jzled/app/src/main/res/drawable/colorpickerview_ic_bubble_big.xml" value="0.181" />
         <entry key="..\:/LedProject/jzled/app/src/main/res/drawable/colorpickerview_ic_bubble_small.xml" value="0.181" />
         <entry key="..\:/LedProject/jzled/app/src/main/res/layout/activity_main.xml" value="0.17239583333333333" />
         <entry key="..\:/LedProject/jzled/app/src/main/res/layout/colorpickerview_dialog_colorpicker.xml" value="0.17239583333333333" />
+        <entry key="..\:/LedProject/jzled/app/src/main/res/layout/led_settings_activity.xml" value="0.13958333333333334" />
       </map>
     </option>
   </component>
