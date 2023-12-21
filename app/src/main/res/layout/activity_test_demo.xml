@@ -11,50 +11,47 @@
     <ImageView
         android:id="@+id/left_home"
         android:src="@drawable/home_selector"
-        android:layout_width="177px"
-        android:layout_height="117px"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button
             android:id="@+id/close"
             android:text="关闭"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_width="100dp"
             android:layout_height="50dp"/>
         <Button
             android:id="@+id/red"
-            android:text="红色"
             android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white"
+            android:layout_marginStart="10dp"
+            android:background="#FF0000"
             android:layout_width="100dp"
             android:layout_height="50dp"/>
         <Button
             android:id="@+id/green"
-            android:text="绿色"
-            android:layout_marginTop="10dp"
+            android:background="#00FF00"
+            android:layout_marginStart="10dp"
             android:gravity="center"
-            android:textColor="@color/white"
             android:layout_width="100dp"
             android:layout_height="50dp"/>
         <Button
             android:id="@+id/blue"
-            android:text="蓝色"
-            android:layout_marginTop="10dp"
+            android:background="#0000FF"
+            android:layout_marginStart="10dp"
             android:gravity="center"
-            android:textColor="@color/white"
             android:layout_width="100dp"
             android:layout_height="50dp"/>
         <Button
             android:id="@+id/cycle"
             android:text="循环"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_width="100dp"

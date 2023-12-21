@@ -18,6 +18,7 @@ import com.jz.led.colorpick.ColorEnvelope;
 import com.jz.led.colorpick.ColorPickerView;
 import com.jz.led.colorpick.listeners.ColorEnvelopeListener;
 import com.jz.led.colorpick.preference.ColorPickerPreferenceManager;
+import com.jz.led.utils.ThreadPoolUtils;
 import com.jz.led.widget.AlphaSlideBar;
 import com.jz.led.widget.BrightnessSlideBar;
 
@@ -108,6 +109,7 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.close:
+                //exec( new String[]{"/bin/sh","-c","echo hello >> ouput.txt"});
                 command("echo \"\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\" > /proc/led_ctrl_byte");
                 break;
             case R.id.red:
@@ -130,7 +132,7 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
             Toast.makeText(this, "正在写入，请稍候", Toast.LENGTH_SHORT).show();
             return;
         }
-        new Thread(new Runnable() {
+        ThreadPoolUtils.getCachedThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -142,7 +144,7 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
                     dos = new DataOutputStream(process.getOutputStream());
                     dos.writeBytes(cmd);
                     dos.flush();
-                    //process.waitFor();
+                    process.destroy();
                     dos.close();
                     Log.d("===zxd","写入完成");
                 } catch (Exception e) {
@@ -152,7 +154,6 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
                     canClick = true;
                 }
             }
-        }).start();
-
+        });
     }
 }
