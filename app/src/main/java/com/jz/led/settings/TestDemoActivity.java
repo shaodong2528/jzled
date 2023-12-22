@@ -46,7 +46,8 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(SystemUtils.getResourcesId("activity_test_demo", "layout"));
+        setContentView(R.layout.activity_test_demo);
+        //setContentView(SystemUtils.getResourcesId("activity_test_demo", "layout"));
         super.onCreate(savedInstanceState);
     }
 
@@ -144,7 +145,7 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
     }
 
     private void initLedSwitchStatue(){
-        mLedSwitchStatue = SystemUtils.getProp("persist.led.switch","OFF").equals("ON");
+        mLedSwitchStatue = SystemUtils.getProp("persist.led.switch","ON").equals("ON");
         vModeLay.setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.tv_led_bright_txt).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.ll_led_bright_lay).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
@@ -272,7 +273,7 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
                     dos = new DataOutputStream(process.getOutputStream());
                     dos.writeBytes(cmd);
                     dos.flush();
-                    process.destroy();
+                    //process.destroy();
                     dos.close();
                     Log.d("===zxd","写入完成");
                 } catch (Exception e) {
