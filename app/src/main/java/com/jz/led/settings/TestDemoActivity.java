@@ -245,12 +245,12 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
                 colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color5:
-                command("echo \"\\0\\0z\\0\\0z\\0\\0z\\0\\0z\\0\\0z\\0\\0z\" > /proc/led_ctrl_byte");
-                colorPickerView.setPureColor(Color.parseColor("#12A3B5"));//蓝色
+                colorPickerView.setPureColor(Color.parseColor("#12A3B5"));//青色
                 colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color6:
-                colorPickerView.setPureColor(Color.parseColor("#3E02F8"));//紫色
+                command("echo \"\\0\\0z\\0\\0z\\0\\0z\\0\\0z\\0\\0z\\0\\0z\" > /proc/led_ctrl_byte");
+                colorPickerView.setPureColor(Color.parseColor("#3E02F8"));//蓝色
                 colorPickerView.notifyColorChanged();
                 break;
         }
