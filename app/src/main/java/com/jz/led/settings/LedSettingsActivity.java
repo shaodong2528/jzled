@@ -44,6 +44,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private boolean isGradientMode;  //是否渐变模式
     private boolean isMusicMode;  //是否音乐模式
     private ImageView vBottomSelectLine; //底部推荐颜色线
+    private int lastPointX = 0;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -134,6 +135,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
 
     @Override
     protected void initData() {
+        //获取上次保存点的位置
         initLedSwitchStatue();
         initCircleStatue();
         String mode = SystemUtils.getProp("persist.current.led.mode","");
@@ -153,6 +155,14 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vModeMusic.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_musical));
         }
+        brightnessSlideBar.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lastPointX = ColorPickerPreferenceManager.getInstance(LedSettingsActivity.this)
+                        .getBrightnessSliderPosition("bright",colorPickerView.getSelectedPoint().x);
+                brightnessSlideBar.updateSelectorX(lastPointX);
+            }
+        }, 200);
     }
 
     private void initLedSwitchStatue(){
@@ -265,10 +275,14 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 initFocusView();
                 break;
             case R.id.iv_add:
-
+                lastPointX = lastPointX + 10;
+                brightnessSlideBar.updateSelectorX(lastPointX);
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_minus:
-
+                lastPointX = lastPointX - 10;
+                brightnessSlideBar.updateSelectorX(lastPointX);
+                colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_color1:
                 switchRecmdColor(1);
@@ -432,7 +446,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     @Override
     protected void onPause() {
         ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
-        manager.setColor("MyColorPicker", colorPickerView.getColor()); // manipulates the saved color data.
+        manager.setColor("MyColorPicker", colorPickerView.getColor());   //保存颜色
+        manager.setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
         super.onPause();
     }
 }
