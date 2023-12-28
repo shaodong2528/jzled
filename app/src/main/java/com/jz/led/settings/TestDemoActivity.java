@@ -1,5 +1,6 @@
 package com.jz.led.settings;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
@@ -16,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jz.led.activity.BasicActivity;
+import com.jz.led.activity.LightTestActivity;
 import com.jz.led.colorpick.ActionMode;
 import com.jz.led.colorpick.ColorEnvelope;
 import com.jz.led.colorpick.ColorPickerView;
@@ -238,6 +240,7 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
             case R.id.iv_color3:
                 colorPickerView.setPureColor(Color.parseColor("#F7A002")); //黄色
                 colorPickerView.notifyColorChanged();
+                startActivity(new Intent(this, LightTestActivity.class));
                 break;
             case R.id.iv_color4:
                 command("echo \"\\0z\\0\\0z\\0\\0z\\0\\0z\\0\\0z\\0\\0z\\0\" > /proc/led_ctrl_byte");

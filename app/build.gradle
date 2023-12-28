@@ -63,7 +63,10 @@ android {
             java.srcDirs = ['src/main/java']
         }
     }
-
+    //打包出现错误提示问题
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 dependencies {

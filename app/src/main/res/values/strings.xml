@@ -12,5 +12,24 @@
     <string name="app_led_mode_pipeline">Pipeline Mode</string>
     <string name="app_led_mode_musical">Musical Groove</string>
 
+    <string name="rgb_hex">RGB HEX</string>
+    <string name="blink_params">闪烁灯参数</string>
+    <string name="blink_params_open">亮灯周期(毫秒)</string>
+    <string name="blink_params_close">关灯周期(毫秒)</string>
+    <string name="stream_params">流水灯参数</string>
+    <string name="stream_params_speed">流水速度(毫秒)</string>
+    <string name="breathe_params">呼吸灯参数</string>
+    <string name="breathe_params_duration">呼吸周期(毫秒)</string>
+    <string name="btn_open">开</string>
+    <string name="btn_close">关</string>
+    <string name="radio_mode_normal">普通</string>
+    <string name="radio_mode_blink">闪烁灯</string>
+    <string name="radio_mode_stream">流水灯</string>
+    <string name="radio_mode_breathe">呼吸灯</string>
+    <string name="radio_mode_single">控制指定灯</string>
+    <string name="turn_off_index">要关闭的灯</string>
+    <string name="turn_off">关闭</string>
+    <string name="light_number">号灯</string>
+
 
 </resources>
