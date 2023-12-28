@@ -241,6 +241,7 @@
                 android:layout_height="@dimen/x400"/>
             <!--分隔线-->
             <ImageView
+                android:id="@+id/iv_cycle_line"
                 android:src="@mipmap/split_line"
                 android:layout_marginTop="@dimen/y50"
                 android:layout_gravity="center_horizontal"
@@ -248,6 +249,7 @@
                 android:layout_height="@dimen/y9"/>
             <!--循环开关-->
             <LinearLayout
+                android:id="@+id/ll_right_switch"
                 android:layout_marginTop="@dimen/y35"
                 android:orientation="horizontal"
                 android:layout_marginEnd="@dimen/x60"

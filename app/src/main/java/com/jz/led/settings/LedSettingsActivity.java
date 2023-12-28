@@ -35,7 +35,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private ImageView vSwitchImg,vCircleImg,vAdd,vMinus,vGradientPan;
     private LinearLayout vModeList;
     private LinearLayout vModeLay,vModeSing,vModeGradient,vModeBreadh,vModeWater,vModeMusic;
-    private FrameLayout vLedSwitchLay,vCircleSiwtchLay;
+    private FrameLayout vLedSwitchLay,vCircleSiwtch;
     private ImageView vLedSwitchLeftPoint,vLedSwitchRightPoint,vCircleSwitchLeftPoint,vCircleSwitchRightPoint;
     private boolean mLedSwitchStatue,mCircleSwitchStatue;
     private TextView vModeName;
@@ -45,6 +45,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private boolean isMusicMode;  //是否音乐模式
     private ImageView vBottomSelectLine; //底部推荐颜色线
     private int lastPointX = 0;
+    private LinearLayout vCycleSwitchLay; //循环开关布局
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -64,8 +65,9 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         vLedSwitchLeftPoint = findViewById(R.id.iv_switch_point_left);
         vLedSwitchRightPoint = findViewById(R.id.iv_switch_point_right);
         //循环开关
-        vCircleSiwtchLay = findViewById(R.id.fl_circle_switch_lay);
-        vCircleSiwtchLay.setOnClickListener(this);
+        vCycleSwitchLay = findViewById(R.id.ll_right_switch);
+        vCircleSiwtch = findViewById(R.id.fl_circle_switch_lay);
+        vCircleSiwtch.setOnClickListener(this);
         vCircleImg = findViewById(R.id.iv_cycle_switch);
         vCircleSwitchLeftPoint = findViewById(R.id.iv_cycle_point_left);
         vCircleSwitchRightPoint = findViewById(R.id.iv_cycle_point_right);
@@ -410,6 +412,9 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private void switchRecomdIcon(String mode){
         isGradientMode = false;
         isMusicMode = false;
+        //循环开关布局
+        findViewById(R.id.iv_cycle_line).setVisibility(View.INVISIBLE);
+        vCycleSwitchLay.setVisibility(View.INVISIBLE);
         if(Contrants.MODE_GRADIENT.equals(mode)){  //渐变
             isGradientMode = true;
             colorPickerView.setVisibility(View.INVISIBLE);
@@ -427,6 +432,9 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vGradientPan.setVisibility(View.INVISIBLE);
             vMusicBg.setVisibility(View.VISIBLE);
         }else {
+            //循环开关布局
+            findViewById(R.id.iv_cycle_line).setVisibility(View.VISIBLE);
+            vCycleSwitchLay.setVisibility(View.VISIBLE);
             colorPickerView.setVisibility(View.VISIBLE);
             vGradientPan.setVisibility(View.INVISIBLE);
             vMusicBg.setVisibility(View.INVISIBLE);
