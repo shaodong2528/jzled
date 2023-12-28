@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class LedUtil {
 
-    private enum LightMode {
+    public static enum LightMode {
         //正常、闪烁、流水、呼吸、单个开
         NORMAL, BLINK, STREAM, BREATHE, SINGLE
     }

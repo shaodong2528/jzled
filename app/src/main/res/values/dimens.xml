@@ -1,3 +1,10 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="bottom_line_mar_left1">@dimen/xxx241</dimen>
+    <dimen name="bottom_line_mar_left2">@dimen/xxx360</dimen>
+    <dimen name="bottom_line_mar_left3">@dimen/xxx476</dimen>
+    <dimen name="bottom_line_mar_left4">@dimen/xxx593</dimen>
+    <dimen name="bottom_line_mar_left5">@dimen/xxx712</dimen>
+    <dimen name="bottom_line_mar_left6">@dimen/xxx830</dimen>
 </resources>

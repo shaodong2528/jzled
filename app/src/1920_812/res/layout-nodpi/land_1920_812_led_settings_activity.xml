@@ -122,6 +122,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_minus"
+                android:layout_marginEnd="@dimen/xxx5"
                 android:background="@drawable/minus_selector"
                 android:layout_width="@dimen/xxx57"
                 android:layout_height="@dimen/xxx57"/>
@@ -138,6 +139,7 @@
             </androidx.cardview.widget.CardView>
             <ImageView
                 android:id="@+id/iv_add"
+                android:layout_marginStart="@dimen/xxx5"
                 android:background="@drawable/add_selector"
                 android:layout_width="@dimen/xxx57"
                 android:layout_height="@dimen/xxx57"/>
@@ -162,7 +164,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_color1"
-                android:src="@mipmap/color_red"
+                android:src="@mipmap/icon_color_red_1"
                 android:layout_marginStart="@dimen/xxx10"
                 android:background="@drawable/color_item_selector"
                 android:paddingTop="@dimen/yyy2"
@@ -173,7 +175,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_orange"
+                android:src="@mipmap/icon_color_orange_2"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -181,7 +183,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_yellow"
+                android:src="@mipmap/icon_color_yellow_3"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -189,7 +191,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_green"
+                android:src="@mipmap/icon_color_green_4"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -197,7 +199,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_blue"
+                android:src="@mipmap/icon_color_cyan_5"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -205,7 +207,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_purple"
+                android:src="@mipmap/icon_color_purple_6"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
         </LinearLayout>
@@ -216,7 +218,7 @@
         android:src="@mipmap/line"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/yyy15"
-        android:layout_marginStart="@dimen/xxx240"
+        android:layout_marginStart="@dimen/xxx241"
         android:layout_width="@dimen/xxx64"
         android:layout_height="@dimen/yyy14"/>
     <!--右侧部分-->
@@ -289,10 +291,18 @@
         <ImageView
             android:id="@+id/iv_gradient"
             android:visibility="gone"
-            android:src="@mipmap/read_pan"
+            android:src="@mipmap/gradient_sepan1"
             android:layout_gravity="center_horizontal"
             android:layout_width="@dimen/xxx700"
             android:layout_height="@dimen/xxx700"/>
+        <!--音谱图片-->
+        <ImageView
+            android:id="@+id/iv_music_bg"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:src="@mipmap/led_music_bg"
+            android:layout_width="@dimen/xxx700"
+            android:layout_height="@dimen/yyy430"/>
         <!--mode list-->
         <LinearLayout
             android:id="@+id/ll_mode_list"

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.jz.led.colorpick.ColorPickerView;
 import com.jz.led.colorpick.listeners.ColorEnvelopeListener;
 import com.jz.led.colorpick.preference.ColorPickerPreferenceManager;
 import com.jz.led.utils.Contrants;
+import com.jz.led.utils.LedUtil;
 import com.jz.led.utils.SystemUtils;
 import com.jz.led.widget.AlphaSlideBar;
 import com.jz.led.widget.BrightnessSlideBar;
@@ -37,6 +39,11 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private ImageView vLedSwitchLeftPoint,vLedSwitchRightPoint,vCircleSwitchLeftPoint,vCircleSwitchRightPoint;
     private boolean mLedSwitchStatue,mCircleSwitchStatue;
     private TextView vModeName;
+    private ImageView vGradientIconColor1,vGradientIconColor2,vGradientIconColor3,vGradientIconColor4,vGradientIconColor5,vGradientIconColor6;
+    private ImageView vMusicBg;
+    private boolean isGradientMode;  //是否渐变模式
+    private boolean isMusicMode;  //是否音乐模式
+    private ImageView vBottomSelectLine; //底部推荐颜色线
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -95,15 +102,22 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         vMinus = findViewById(R.id.iv_minus);
         vMinus.setOnClickListener(this);
 
+        vMusicBg = findViewById(R.id.iv_music_bg);
         vGradientPan = findViewById(R.id.iv_gradient);
         vModeList = findViewById(R.id.ll_mode_list);
 
-        findViewById(R.id.iv_color1).setOnClickListener(this);
-        findViewById(R.id.iv_color2).setOnClickListener(this);
-        findViewById(R.id.iv_color3).setOnClickListener(this);
-        findViewById(R.id.iv_color4).setOnClickListener(this);
-        findViewById(R.id.iv_color5).setOnClickListener(this);
-        findViewById(R.id.iv_color6).setOnClickListener(this);
+        vGradientIconColor1 = findViewById(R.id.iv_color1);
+        vGradientIconColor2 = findViewById(R.id.iv_color2);
+        vGradientIconColor3 = findViewById(R.id.iv_color3);
+        vGradientIconColor4 = findViewById(R.id.iv_color4);
+        vGradientIconColor5 = findViewById(R.id.iv_color5);
+        vGradientIconColor6 = findViewById(R.id.iv_color6);
+        vGradientIconColor1.setOnClickListener(this);
+        vGradientIconColor2.setOnClickListener(this);
+        vGradientIconColor3.setOnClickListener(this);
+        vGradientIconColor4.setOnClickListener(this);
+        vGradientIconColor5.setOnClickListener(this);
+        vGradientIconColor6.setOnClickListener(this);
 
         vModeSing = findViewById(R.id.ll_mode_sing);
         vModeGradient = findViewById(R.id.ll_mode_gradient);
@@ -148,7 +162,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         findViewById(R.id.ll_led_bright_lay).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.tv_recmd_txt).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.ll_recmd_color_lay).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
-        findViewById(R.id.iv_line).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
+        vBottomSelectLine = findViewById(R.id.iv_line);
+        vBottomSelectLine.setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.fl_right_lay).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         vSwitchImg.setBackgroundResource(mLedSwitchStatue ? R.mipmap.switch_on_bg_1920:R.mipmap.switch_off_bg_1920);
         vLedSwitchLeftPoint.setVisibility(mLedSwitchStatue ? View.VISIBLE:View.INVISIBLE);
@@ -177,12 +192,12 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         }
         mFocusViewList.add(findViewById(R.id.iv_minus));
         mFocusViewList.add(findViewById(R.id.iv_add));
-        mFocusViewList.add(findViewById(R.id.iv_color1));
-        mFocusViewList.add(findViewById(R.id.iv_color2));
-        mFocusViewList.add(findViewById(R.id.iv_color3));
-        mFocusViewList.add(findViewById(R.id.iv_color4));
-        mFocusViewList.add(findViewById(R.id.iv_color5));
-        mFocusViewList.add(findViewById(R.id.iv_color6));
+        mFocusViewList.add(vGradientIconColor1);
+        mFocusViewList.add(vGradientIconColor2);
+        mFocusViewList.add(vGradientIconColor3);
+        mFocusViewList.add(vGradientIconColor4);
+        mFocusViewList.add(vGradientIconColor5);
+        mFocusViewList.add(vGradientIconColor6);
     }
 
     @Override
@@ -256,58 +271,116 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
 
                 break;
             case R.id.iv_color1:
-                colorPickerView.setPureColor(Color.parseColor("#FC2E28")); //红色
-                colorPickerView.notifyColorChanged();
+                switchRecmdColor(1);
                 break;
             case R.id.iv_color2:
-                colorPickerView.setPureColor(Color.parseColor("#F66202")); //橙色
-                colorPickerView.notifyColorChanged();
+                switchRecmdColor(2);
                 break;
             case R.id.iv_color3:
-                colorPickerView.setPureColor(Color.parseColor("#F7A002")); //黄色
-                colorPickerView.notifyColorChanged();
+                switchRecmdColor(3);
                 break;
             case R.id.iv_color4:
-                colorPickerView.setPureColor(Color.parseColor("#2DAE18"));//绿色
-                colorPickerView.notifyColorChanged();
+                switchRecmdColor(4);
                 break;
             case R.id.iv_color5:
-                colorPickerView.setPureColor(Color.parseColor("#12A3B5"));//蓝色
-                colorPickerView.notifyColorChanged();
+                switchRecmdColor(5);
                 break;
             case R.id.iv_color6:
-                colorPickerView.setPureColor(Color.parseColor("#3E02F8"));//紫色
-                colorPickerView.notifyColorChanged();
+                switchRecmdColor(6);
                 break;
-            case R.id.ll_mode_sing:
+            case R.id.ll_mode_sing:    //单色模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_SING);
                 vModeName.setText(getResources().getString(R.string.app_led_mode_monochrome));
-                onAllModeNoSel(vModeSing);
+                onAllModeNoSel(vModeSing, Contrants.MODE_SING);
                 break;
-            case R.id.ll_mode_gradient:
+            case R.id.ll_mode_gradient: //渐变模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_GRADIENT);
                 vModeName.setText(getResources().getString(R.string.app_led_mode_gradient));
-                onAllModeNoSel(vModeGradient);
+                onAllModeNoSel(vModeGradient,Contrants.MODE_GRADIENT);
                 break;
-            case R.id.ll_mode_breath:
+            case R.id.ll_mode_breath:   //呼吸模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_BREATH);
                 vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
-                onAllModeNoSel(vModeBreadh);
+                onAllModeNoSel(vModeBreadh,Contrants.MODE_BREATH);
                 break;
-            case R.id.ll_mode_water:
+            case R.id.ll_mode_water:   //流水模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_WATER);
                 vModeName.setText(getResources().getString(R.string.app_led_mode_pipeline));
-                onAllModeNoSel(vModeWater);
+                onAllModeNoSel(vModeWater,Contrants.MODE_WATER);
                 break;
-            case R.id.ll_mode_music:
+            case R.id.ll_mode_music:  //音谱模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_MUSIC);
                 vModeName.setText(getResources().getString(R.string.app_led_mode_musical));
-                onAllModeNoSel(vModeMusic);
+                onAllModeNoSel(vModeMusic,Contrants.MODE_MUSIC);
                 break;
         }
     }
 
-    private void onAllModeNoSel(View curView){
+    private void switchRecmdColor(int idnex){
+        //底部线条
+        int lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left1);
+        switch (idnex){
+            case 1:
+                if(isGradientMode){
+                    vGradientPan.setImageResource(R.mipmap.gradient_sepan1);
+                }else{
+                    colorPickerView.setPureColor(Color.parseColor("#FC2E28"));
+                    colorPickerView.notifyColorChanged();
+                }
+                break;
+            case 2:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left2);
+                if(isGradientMode){
+                    vGradientPan.setImageResource(R.mipmap.gradient_sepan2);
+                }else{
+                    colorPickerView.setPureColor(Color.parseColor("#F66202"));
+                    colorPickerView.notifyColorChanged();
+                }
+                break;
+            case 3:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left3);
+                if(isGradientMode){
+                    vGradientPan.setImageResource(R.mipmap.gradient_sepan3);
+                }else{
+                    colorPickerView.setPureColor(Color.parseColor("#F7A002"));
+                    colorPickerView.notifyColorChanged();
+                }
+                break;
+            case 4:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left4);
+                if(isGradientMode){
+                    vGradientPan.setImageResource(R.mipmap.gradient_sepan4);
+                }else{
+                    colorPickerView.setPureColor(Color.parseColor("#2DAE18"));
+                    colorPickerView.notifyColorChanged();
+                }
+                break;
+            case 5:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left5);
+                if(isGradientMode){
+                    vGradientPan.setImageResource(R.mipmap.gradient_sepan5);
+                }else{
+                    colorPickerView.setPureColor(Color.parseColor("#12A3B5"));
+                    colorPickerView.notifyColorChanged();
+                }
+                break;
+            case 6:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left6);
+                if(isGradientMode){
+                    vGradientPan.setImageResource(R.mipmap.gradient_sepan6);
+                }else{
+                    colorPickerView.setPureColor(Color.parseColor("#3E02F8"));
+                    colorPickerView.notifyColorChanged();
+                }
+                break;
+        }
+        //更新线条位置
+        RelativeLayout.LayoutParams bottomLine = (RelativeLayout.LayoutParams) vBottomSelectLine.getLayoutParams();
+        bottomLine.setMarginStart(lineMarStart);
+        vBottomSelectLine.setLayoutParams(bottomLine);
+    }
+
+    private void onAllModeNoSel(View curView, String mode){
         vModeSing.setSelected(false);
         vModeGradient.setSelected(false);
         vModeBreadh.setSelected(false);
@@ -317,6 +390,43 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         vModeList.setVisibility(View.GONE);
         initFocusView();
         vModeLay.requestFocus();
+        switchRecomdIcon(mode);
+    }
+
+    private void switchRecomdIcon(String mode){
+        isGradientMode = false;
+        isMusicMode = false;
+        if(Contrants.MODE_GRADIENT.equals(mode)){  //渐变
+            isGradientMode = true;
+            colorPickerView.setVisibility(View.INVISIBLE);
+            vGradientPan.setVisibility(View.VISIBLE);
+            vMusicBg.setVisibility(View.INVISIBLE);
+            vGradientIconColor1.setImageResource(R.mipmap.gradient_icon_color1);
+            vGradientIconColor2.setImageResource(R.mipmap.gradient_icon_color2);
+            vGradientIconColor3.setImageResource(R.mipmap.gradient_icon_color3);
+            vGradientIconColor4.setImageResource(R.mipmap.gradient_icon_color4);
+            vGradientIconColor5.setImageResource(R.mipmap.gradient_icon_color5);
+            vGradientIconColor6.setImageResource(R.mipmap.gradient_icon_color6);
+        }else if(Contrants.MODE_MUSIC.equals(mode)){  //music
+            isMusicMode = true;
+            colorPickerView.setVisibility(View.INVISIBLE);
+            vGradientPan.setVisibility(View.INVISIBLE);
+            vMusicBg.setVisibility(View.VISIBLE);
+        }else {
+            colorPickerView.setVisibility(View.VISIBLE);
+            vGradientPan.setVisibility(View.INVISIBLE);
+            vMusicBg.setVisibility(View.INVISIBLE);
+            vGradientIconColor1.setImageResource(R.mipmap.icon_color_red_1);
+            vGradientIconColor2.setImageResource(R.mipmap.icon_color_orange_2);
+            vGradientIconColor3.setImageResource(R.mipmap.icon_color_yellow_3);
+            vGradientIconColor4.setImageResource(R.mipmap.icon_color_green_4);
+            vGradientIconColor5.setImageResource(R.mipmap.icon_color_cyan_5);
+            vGradientIconColor6.setImageResource(R.mipmap.icon_color_purple_6);
+        }
+        //音乐模式时隐藏推荐颜色相关
+        findViewById(R.id.tv_recmd_txt).setVisibility(isMusicMode ? View.INVISIBLE :View.VISIBLE);
+        findViewById(R.id.ll_recmd_color_lay).setVisibility(isMusicMode ? View.INVISIBLE :View.VISIBLE);
+        vBottomSelectLine.setVisibility(isMusicMode ? View.INVISIBLE :View.VISIBLE);
     }
 
     @Override

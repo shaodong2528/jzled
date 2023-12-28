@@ -163,7 +163,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_color1"
-                android:src="@mipmap/color_red"
+                android:src="@mipmap/icon_color_red_1"
                 android:layout_marginStart="@dimen/xxx10"
                 android:background="@drawable/color_item_selector"
                 android:paddingTop="@dimen/yyy2"
@@ -174,7 +174,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_orange"
+                android:src="@mipmap/icon_color_orange_2"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -182,7 +182,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_yellow"
+                android:src="@mipmap/icon_color_yellow_3"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -190,7 +190,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_green"
+                android:src="@mipmap/icon_color_green_4"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -198,7 +198,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_blue"
+                android:src="@mipmap/icon_color_cyan_5"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
@@ -206,7 +206,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/color_purple"
+                android:src="@mipmap/icon_color_purple_6"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
         </LinearLayout>
@@ -290,7 +290,7 @@
         <ImageView
             android:id="@+id/iv_gradient"
             android:visibility="gone"
-            android:src="@mipmap/read_pan"
+            android:src="@mipmap/gradient_sepan1"
             android:layout_gravity="center_horizontal"
             android:layout_width="@dimen/xxx700"
             android:layout_height="@dimen/xxx700"/>
