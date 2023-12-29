@@ -1,7 +1,6 @@
 package com.jz.led.settings;
 
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.jz.led.activity.BasicActivity;
 import com.jz.led.colorpick.ActionMode;
@@ -22,11 +20,13 @@ import com.jz.led.colorpick.ColorEnvelope;
 import com.jz.led.colorpick.ColorPickerView;
 import com.jz.led.colorpick.listeners.ColorEnvelopeListener;
 import com.jz.led.colorpick.preference.ColorPickerPreferenceManager;
+import com.jz.led.light.Light;
 import com.jz.led.utils.Contrants;
 import com.jz.led.utils.LedUtil;
 import com.jz.led.utils.SystemUtils;
-import com.jz.led.widget.AlphaSlideBar;
 import com.jz.led.widget.BrightnessSlideBar;
+
+import java.util.ArrayList;
 
 
 public class LedSettingsActivity extends BasicActivity implements View.OnClickListener {
@@ -46,7 +46,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private ImageView vBottomSelectLine; //底部推荐颜色线
     private int lastPointX = 0;
     private LinearLayout vCycleSwitchLay; //循环开关布局
-
+    private String mCurHexColor = "0000FF",mCurLedMode = Contrants.MODE_SING;
+    private LedUtil ledUtil = new LedUtil();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -76,9 +77,6 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         colorPickerView.setActionMode(ActionMode.LAST); //手指释放回调监听
         ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
         int color = manager.getColor("MyColorPicker",0);
-        Point point = manager.getSelectorPosition("savepoint",new Point(100,100));
-        int bright = manager.getBrightnessSliderPosition("savebright",0);
-        Log.d("===zzz","color="+color+",px="+point.x+",py="+point.y+",bright="+bright);
         colorPickerView.setInitialColor(color);
         colorPickerView.setColorListener(new ColorEnvelopeListener() {
             @Override
@@ -87,14 +85,18 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     int color = envelope.getColor();
                     String hexColor = envelope.getHexCode();
                     int argb[] = envelope.getArgb();
-                    Log.d("===zzz","fromUser="+fromUser+",color="+color+",hexColor="+hexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]);
+                    mCurHexColor = hexColor.substring(2,hexColor.length());
+                    SystemUtils.setProp("persist.save.led.hexcolor",mCurHexColor);
+                    Log.d("===zzz","fromUser="+fromUser+",color="+color+",hexColor="+hexColor+","+mCurHexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]);
                     vModeName.setTextColor(color);
+                    ledUtil.turnOnForMode(ledUtil.getMode(mCurLedMode),ledUtil.getColors(mCurHexColor,mCurLedMode));
                 }
             }
         });
         brightnessSlideBar = findViewById(R.id.brightnessSlide);
         colorPickerView.attachBrightnessSlider(brightnessSlideBar);
 
+        vBottomSelectLine = findViewById(R.id.iv_line);
 
         vModeName = findViewById(R.id.tv_mode_name);
         vModeLay = findViewById(R.id.ll_mode);
@@ -144,18 +146,23 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         if(mode.equals(Contrants.MODE_SING)){
             vModeSing.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_monochrome));
+            mCurLedMode = Contrants.MODE_SING;
         }else if(mode.equals(Contrants.MODE_GRADIENT)){
             vModeGradient.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_gradient));
+            mCurLedMode = Contrants.MODE_GRADIENT;
         }else if(mode.equals(Contrants.MODE_BREATH)){
             vModeBreadh.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
-        }else if(mode.equals(Contrants.MODE_WATER)){
+            mCurLedMode = Contrants.MODE_BREATH;
+        }else if(mode.equals(Contrants.MODE_STREAM)){
             vModeWater.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_pipeline));
+            mCurLedMode = Contrants.MODE_STREAM;
         }else if(mode.equals(Contrants.MODE_MUSIC)){
             vModeMusic.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_musical));
+            mCurLedMode = Contrants.MODE_MUSIC;
         }
         brightnessSlideBar.postDelayed(new Runnable() {
             @Override
@@ -174,12 +181,17 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         findViewById(R.id.ll_led_bright_lay).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.tv_recmd_txt).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.ll_recmd_color_lay).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
-        vBottomSelectLine = findViewById(R.id.iv_line);
+
         vBottomSelectLine.setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         findViewById(R.id.fl_right_lay).setVisibility(mLedSwitchStatue ? View.VISIBLE :View.INVISIBLE);
         vSwitchImg.setBackgroundResource(mLedSwitchStatue ? R.mipmap.switch_on_bg_1920:R.mipmap.switch_off_bg_1920);
         vLedSwitchLeftPoint.setVisibility(mLedSwitchStatue ? View.VISIBLE:View.INVISIBLE);
         vLedSwitchRightPoint.setVisibility(mLedSwitchStatue ? View.INVISIBLE:View.VISIBLE);
+        if(mLedSwitchStatue){
+
+        }else{
+            Light.getInstance().turnOff(); //关闭所有灯
+        }
     }
 
     private void initCircleStatue(){
@@ -306,26 +318,31 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 break;
             case R.id.ll_mode_sing:    //单色模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_SING);
+                mCurLedMode = Contrants.MODE_SING;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_monochrome));
                 onAllModeNoSel(vModeSing, Contrants.MODE_SING);
                 break;
             case R.id.ll_mode_gradient: //渐变模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_GRADIENT);
+                mCurLedMode = Contrants.MODE_GRADIENT;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_gradient));
                 onAllModeNoSel(vModeGradient,Contrants.MODE_GRADIENT);
                 break;
             case R.id.ll_mode_breath:   //呼吸模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_BREATH);
+                mCurLedMode = Contrants.MODE_BREATH;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
                 onAllModeNoSel(vModeBreadh,Contrants.MODE_BREATH);
                 break;
             case R.id.ll_mode_water:   //流水模式
-                SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_WATER);
+                SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_STREAM);
+                mCurLedMode = Contrants.MODE_STREAM;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_pipeline));
-                onAllModeNoSel(vModeWater,Contrants.MODE_WATER);
+                onAllModeNoSel(vModeWater,Contrants.MODE_STREAM);
                 break;
             case R.id.ll_mode_music:  //音谱模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_MUSIC);
+                mCurLedMode = Contrants.MODE_MUSIC;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_musical));
                 onAllModeNoSel(vModeMusic,Contrants.MODE_MUSIC);
                 break;

@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.jz.led.activity.BasicActivity;
 import com.jz.led.activity.LightTestActivity;
@@ -26,7 +25,6 @@ import com.jz.led.colorpick.preference.ColorPickerPreferenceManager;
 import com.jz.led.utils.Contrants;
 import com.jz.led.utils.SystemUtils;
 import com.jz.led.utils.ThreadPoolUtils;
-import com.jz.led.widget.AlphaSlideBar;
 import com.jz.led.widget.BrightnessSlideBar;
 
 import java.io.DataOutputStream;
@@ -137,7 +135,7 @@ public class TestDemoActivity extends BasicActivity implements View.OnClickListe
         }else if(mode.equals(Contrants.MODE_BREATH)){
             vModeBreadh.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
-        }else if(mode.equals(Contrants.MODE_WATER)){
+        }else if(mode.equals(Contrants.MODE_STREAM)){
             vModeWater.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_pipeline));
         }else if(mode.equals(Contrants.MODE_MUSIC)){

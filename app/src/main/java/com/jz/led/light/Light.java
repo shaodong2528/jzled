@@ -63,12 +63,15 @@ public class Light implements ILight {
                         handleTurnOn((int[]) msg.obj);
                         break;
                     case MSG_BLINK:
+                        mHandler.removeMessages(MSG_BLINK);//删除之前的
                         handleBlink((int[]) msg.obj, msg.arg1, msg.arg2);
                         break;
                     case MSG_STREAM:
+                        mHandler.removeMessages(MSG_STREAM); //删除之前的
                         handleStream((int[]) msg.obj, msg.arg1, msg.arg2);
                         break;
                     case MSG_BREATHE:
+                        mHandler.removeMessages(MSG_BREATHE);  //删除之前的
                         handleBreathe((int[]) msg.obj, msg.arg1, msg.arg2);
                         break;
                     case MSG_TURN_OFF_ONE:
@@ -215,11 +218,13 @@ public class Light implements ILight {
     }
 
     private void lightOff() {
+        Log.d("===zxd","lightOff,mCmd="+mCmd);
         Arrays.fill(mCmd, 0, mCmd.length, (byte) 0);
         writeCmd(mCmd);
     }
 
     private void lightOn(int rgb) {
+        Log.d("===zxd","lightOn,rgb="+rgb);
         for (int i = 0; i < NUMBER_OF_LIGHT; i++) {
             mCmd[i * 3] = (byte) rgbR(rgb);
             mCmd[i * 3 + 1] = (byte) rgbG(rgb);
@@ -229,6 +234,7 @@ public class Light implements ILight {
     }
 
     private void updateCmd(int rgb, int index) {
+        Log.d("===zxd","updateCmd,rgb="+rgb);
         if (index >= mCmd.length) return;
         mCmd[index * 3] = (byte) rgbR(rgb);
         mCmd[index * 3 + 1] = (byte) rgbG(rgb);
@@ -236,11 +242,13 @@ public class Light implements ILight {
     }
 
     private void handleTurnOff() {
+        Log.d("===zxd","handleTurnOff,"+mMode);
         if (mMode != MODE_NORMAL) return;
         lightOff();
     }
 
     private void handleTurnOn(int[] rgbs) {
+        Log.d("===zxd","handleTurnOn,"+mMode);
         if (mMode != MODE_NORMAL) return;
         for (int i = 0; i < rgbs.length; i++) {
             updateCmd(rgbs[i], i);
@@ -249,8 +257,8 @@ public class Light implements ILight {
     }
 
     private void handleBlink(int[] rgbs, int openDuration, int closeDuration) {
+        Log.d("===zxdddddd","handleBlink111111111,"+mMode);
         if (mMode != MODE_BLINK) return;
-
         mBlinkOn = !mBlinkOn;
         if (mBlinkOn) {
             if (mBlinkLoopCount > rgbs.length - 1) {
@@ -266,6 +274,7 @@ public class Light implements ILight {
     }
 
     private void handleStream(int[] rgbs, int speed, int index) {
+        Log.d("===zxdddddd","handleStream22222222222222,"+mMode);
         if (mMode != MODE_STREAM) return;
 
         if (index < 0) {
@@ -295,6 +304,7 @@ public class Light implements ILight {
     }
 
     private void handleBreathe(int[] rgbs, int interval, int loopCount) {
+        Log.d("===zxdddddd","handleBreathe33333333333,"+mMode);
         if (mMode != MODE_BREATHE) return;
 
         Log.d(TAG, "handleBreathe loop count " + loopCount);
@@ -335,12 +345,14 @@ public class Light implements ILight {
     }
 
     private void handleTurnOnOne(int rgb, int index) {
+        Log.d("===zxd","handleTurnOnOne,"+mMode);
         if (mMode != MODE_NORMAL) return;
         updateCmd(rgb, index);
         writeCmd(mCmd);
     }
 
     private void handleTurnOffOne(int index) {
+        Log.d("===zxd","handleTurnOffOne,"+mMode);
         if (mMode != MODE_NORMAL) return;
         updateCmd(0x0, index);
         writeCmd(mCmd);

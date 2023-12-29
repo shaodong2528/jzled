@@ -149,7 +149,7 @@ public class LightTestActivity extends Activity {
         return getMode(checkedId);
     }
 
-    private LightMode getMode(int radioBtnId) {
+    public LightMode getMode(int radioBtnId) {
         switch (radioBtnId) {
             case R.id.radio_mode_blink:
                 return LightMode.BLINK;
