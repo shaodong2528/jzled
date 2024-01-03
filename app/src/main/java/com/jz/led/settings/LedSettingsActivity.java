@@ -1,8 +1,13 @@
 package com.jz.led.settings;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,7 +19,9 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.jz.led.LedService;
 import com.jz.led.activity.BasicActivity;
+import com.jz.led.activity.LightTestActivity;
 import com.jz.led.colorpick.ActionMode;
 import com.jz.led.colorpick.ColorEnvelope;
 import com.jz.led.colorpick.ColorPickerView;
@@ -47,7 +54,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private int lastPointX = 0;
     private LinearLayout vCycleSwitchLay; //循环开关布局
     private String mCurHexColor = "0000FF",mCurLedMode = Contrants.MODE_SING;
-    private LedUtil ledUtil = new LedUtil();
+    private LedUtil mService;
+    private String TAG = "==zxd"+LedSettingsActivity.class.getSimpleName();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -87,9 +95,9 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     int argb[] = envelope.getArgb();
                     mCurHexColor = hexColor.substring(2,hexColor.length());
                     SystemUtils.setProp("persist.save.led.hexcolor",mCurHexColor);
-                    Log.d("===zzz","fromUser="+fromUser+",color="+color+",hexColor="+hexColor+","+mCurHexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]);
                     vModeName.setTextColor(color);
-                    ledUtil.turnOnForMode(ledUtil.getMode(mCurLedMode),ledUtil.getColors(mCurHexColor,mCurLedMode));
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
+                    Log.d(TAG,"fromUser="+fromUser+",color="+color+",hexColor="+hexColor+","+mCurHexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]+",thread="+Thread.currentThread().getName());
                 }
             }
         });
@@ -139,6 +147,14 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
 
     @Override
     protected void initData() {
+        if (mService == null) {
+            Intent intentService = new Intent(this, LedService.class);
+            if (bindService(intentService, connection, Context.BIND_AUTO_CREATE)) {
+                Log.d(TAG, "Bind LedService Success!");
+            } else {
+                Log.d(TAG, "Bind LedService Failed!");
+            }
+        }
         //获取上次保存点的位置
         initLedSwitchStatue();
         initCircleStatue();
@@ -274,8 +290,10 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 initLedSwitchStatue();
                 break;
             case R.id.fl_circle_switch_lay: //循环开关
-                SystemUtils.setProp("persist.circle.switch",mCircleSwitchStatue ? "OFF":"ON");
-                initCircleStatue();
+                //SystemUtils.setProp("persist.circle.switch",mCircleSwitchStatue ? "OFF":"ON");
+                //initCircleStatue();
+                //test
+                startActivity(new Intent(this, LightTestActivity.class));
                 break;
             case R.id.left_home:
                 finish();
@@ -289,12 +307,12 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 initFocusView();
                 break;
             case R.id.iv_add:
-                lastPointX = lastPointX + 10;
+                lastPointX = lastPointX + 20;
                 brightnessSlideBar.updateSelectorX(lastPointX);
                 colorPickerView.notifyColorChanged();
                 break;
             case R.id.iv_minus:
-                lastPointX = lastPointX - 10;
+                lastPointX = lastPointX - 20;
                 brightnessSlideBar.updateSelectorX(lastPointX);
                 colorPickerView.notifyColorChanged();
                 break;
@@ -351,11 +369,13 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
 
     private void switchRecmdColor(int idnex){
         //底部线条
+        Contrants.mColorBtnIndex = idnex-1;
         int lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left1);
         switch (idnex){
             case 1:
                 if(isGradientMode){
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan1);
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(0));
                 }else{
                     colorPickerView.setPureColor(Color.parseColor("#FC2E28"));
                     colorPickerView.notifyColorChanged();
@@ -365,6 +385,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left2);
                 if(isGradientMode){
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan2);
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(1));
                 }else{
                     colorPickerView.setPureColor(Color.parseColor("#F66202"));
                     colorPickerView.notifyColorChanged();
@@ -374,6 +395,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left3);
                 if(isGradientMode){
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan3);
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(2));
                 }else{
                     colorPickerView.setPureColor(Color.parseColor("#F7A002"));
                     colorPickerView.notifyColorChanged();
@@ -383,6 +405,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left4);
                 if(isGradientMode){
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan4);
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(3));
                 }else{
                     colorPickerView.setPureColor(Color.parseColor("#2DAE18"));
                     colorPickerView.notifyColorChanged();
@@ -392,6 +415,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left5);
                 if(isGradientMode){
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan5);
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(4));
                 }else{
                     colorPickerView.setPureColor(Color.parseColor("#12A3B5"));
                     colorPickerView.notifyColorChanged();
@@ -401,6 +425,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left6);
                 if(isGradientMode){
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan6);
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(5));
                 }else{
                     colorPickerView.setPureColor(Color.parseColor("#3E02F8"));
                     colorPickerView.notifyColorChanged();
@@ -468,11 +493,30 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         vBottomSelectLine.setVisibility(isMusicMode ? View.INVISIBLE :View.VISIBLE);
     }
 
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected");
+            if (service != null) {
+                mService = (LedUtil) service;
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "onServiceDisconnected");
+            mService = null;
+        }
+    };
+
     @Override
     protected void onPause() {
         ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
         manager.setColor("MyColorPicker", colorPickerView.getColor());   //保存颜色
         manager.setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
+        if(mService != null){
+            unbindService(connection);
+        }
         super.onPause();
     }
 }

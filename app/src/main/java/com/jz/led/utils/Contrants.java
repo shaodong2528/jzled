@@ -8,4 +8,6 @@ public class Contrants {
     public final static String  MODE_MUSIC = "mode_music";
     //是否循环
     public static boolean isCycle = false;
+    //第几个按扭对应的颜色
+    public static int mColorBtnIndex = 0;
 }

@@ -2,7 +2,7 @@ package com.jz.led;
 
 import android.app.Application;
 import android.content.Context;
-import android.widget.Toast;
+import android.content.Intent;
 
 import com.jz.led.message.MessengerClient;
 
@@ -25,6 +25,7 @@ public class MainApplication extends Application {
         if(!getContext().getPackageName().equals("com.jz.server")){
             MessengerClient.getInstance().init(getApplicationContext());
         }
+        startService(new Intent(this, LedService.class));
     }
 
     public static Context getContext() {

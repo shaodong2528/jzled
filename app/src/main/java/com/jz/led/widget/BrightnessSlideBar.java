@@ -84,7 +84,7 @@ public class BrightnessSlideBar extends AbstractSlider {
   protected void updatePaint(Paint colorPaint) {
     float[] hsv = new float[3];
     Color.colorToHSV(getColor(), hsv);
-    hsv[2] = 0.1f;  //default 0
+    hsv[2] = 0.2f;  //default 0
     int startColor = Color.HSVToColor(hsv);
     hsv[2] = 0.95f;  //default 1
     int endColor = Color.HSVToColor(hsv);
