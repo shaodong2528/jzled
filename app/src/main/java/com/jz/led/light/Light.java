@@ -5,9 +5,12 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
+import com.jz.led.utils.Contrants;
+
 import java.lang.Exception;
 import java.io.FileOutputStream;
 import java.lang.StringBuilder;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Light implements ILight {
@@ -47,6 +50,9 @@ public class Light implements ILight {
     private final byte[] mCmd = new byte[NUMBER_OF_LIGHT * 3];
 
     private static final Light mLight = new Light();
+    private int cycleCount = 0;
+    //单色推荐颜色
+    private final ArrayList<String> recmdColors = new ArrayList<>(Arrays.asList("F50802","F26103","E39507","2DA71A","1592A3","4307F1"));
 
     private Light() {
         mHandlerThread = new HandlerThread("light-service");
@@ -254,6 +260,14 @@ public class Light implements ILight {
             updateCmd(rgbs[i], i);
         }
         writeCmd(mCmd);
+        if(Contrants.isCycle){
+            ++cycleCount;
+            for (int i = 0 ;i < recmdColors.size();i++){
+                int cycles[] = getRGBS(recmdColors);
+                rgbs[i] = cycles[cycleCount % NUMBER_OF_LIGHT];
+            }
+            mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_TURN_ON, -1, -1, rgbs),1000);
+        }
     }
 
     private void handleBlink(int[] rgbs, int openDuration, int closeDuration) {
@@ -299,6 +313,14 @@ public class Light implements ILight {
         if (next - STREAM_COUNT > NUMBER_OF_LIGHT) {
             next = 0;
             mStreamLoopCount++;
+            //开启循环
+            if(Contrants.isCycle){
+                int cycles[] = getRGBS(recmdColors);
+                for (int i = 0 ; i < NUMBER_OF_LIGHT;i++){
+                    rgbs[i] = cycles[mStreamLoopCount % NUMBER_OF_LIGHT];
+                }
+                Log.d("===zzzddd","streamCount="+mStreamLoopCount+",cycles="+cycles+",rgbs="+rgbs);
+            }
         }
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_STREAM, speed, next, rgbs), speed);
     }
@@ -336,6 +358,12 @@ public class Light implements ILight {
                 loopCount = 0;
             }
             mBreathHSV = rgbToHSV(rgbs[loopCount]);
+            //循环颜色
+            if(Contrants.isCycle){
+                int cycles[] = getRGBS(recmdColors);
+                mBreathHSV = rgbToHSV(cycles[++cycleCount % NUMBER_OF_LIGHT]);
+                Log.d("===zzzddd","recmd cycle "+cycleCount);
+            }
             mBreathHSV[2] = 0.01;
         } else {
             mBreathHSV[2] = v;
@@ -367,6 +395,7 @@ public class Light implements ILight {
     @Override
     public void turnOn(int[] rgb) {
         mMode = MODE_NORMAL;
+        mHandler.removeMessages(MSG_TURN_ON);
         mHandler.sendMessage(mHandler.obtainMessage(MSG_TURN_ON, -1, -1, rgb));
     }
 
@@ -398,5 +427,21 @@ public class Light implements ILight {
     public void breathe(int[] rgb, int interval) {
         mMode = MODE_BREATHE;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_BREATHE, interval, -1, rgb));
+    }
+
+    /**
+     * 16进制字符串值转成int
+     * @return
+     */
+    public int[] getRGBS(ArrayList<String> hexRgbs) {
+        ArrayList<Integer> rgbList = new ArrayList<>();
+        for (int i = 0 ; i < hexRgbs.size();i++){
+            rgbList.add(Integer.parseInt(hexRgbs.get(i), 16));
+        }
+        int[] rgbs = new int[rgbList.size()];
+        for (int i = 0; i < rgbs.length; i++) {
+            rgbs[i] = rgbList.get(i);
+        }
+        return rgbs;
     }
 }

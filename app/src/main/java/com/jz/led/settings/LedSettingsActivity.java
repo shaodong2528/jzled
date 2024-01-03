@@ -157,7 +157,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         }
         //获取上次保存点的位置
         initLedSwitchStatue();
-        initCircleStatue();
+        initCircleStatue(false);
         String mode = SystemUtils.getProp("persist.current.led.mode","");
         if(mode.equals(Contrants.MODE_SING)){
             vModeSing.setSelected(true);
@@ -211,11 +211,20 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         }
     }
 
-    private void initCircleStatue(){
+    private void initCircleStatue(boolean click){
         mCircleSwitchStatue = SystemUtils.getProp("persist.circle.switch","OFF").equals("ON");
         vCircleImg.setBackgroundResource(mCircleSwitchStatue ? R.mipmap.switch_on_bg_1920:R.mipmap.switch_off_bg_1920);
         vCircleSwitchLeftPoint.setVisibility(mCircleSwitchStatue ? View.VISIBLE:View.INVISIBLE);
         vCircleSwitchRightPoint.setVisibility(mCircleSwitchStatue ? View.INVISIBLE:View.VISIBLE);
+        Contrants.isCycle = mCircleSwitchStatue;
+        if(Contrants.isCycle){  //该模式下禁用色盘
+            colorPickerView.setEnabled(false);
+            if(click && Contrants.MODE_SING.equals(mCurLedMode) || Contrants.MODE_BREATH.equals(mCurLedMode) || Contrants.MODE_STREAM.equals(mCurLedMode)){
+                mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
+            }
+        }else{
+            colorPickerView.setEnabled(true);
+        }
     }
 
     @Override
@@ -292,7 +301,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 break;
             case R.id.fl_circle_switch_lay: //循环开关
                 SystemUtils.setProp("persist.circle.switch",mCircleSwitchStatue ? "OFF":"ON");
-                initCircleStatue();
+                initCircleStatue(true);
                 //startActivity(new Intent(this, LightTestActivity.class));
                 break;
             case R.id.left_home:
@@ -307,14 +316,14 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 initFocusView();
                 break;
             case R.id.iv_add:
-                if(!mCurLedMode.equals(Contrants.MODE_BREATH)){
+                if(!mCurLedMode.equals(Contrants.MODE_BREATH) && !Contrants.isCycle){
                     lastPointX = lastPointX + 20;
                     brightnessSlideBar.updateSelectorX(lastPointX);
                     colorPickerView.notifyColorChanged();
                 }
                 break;
             case R.id.iv_minus:
-                if(!mCurLedMode.equals(Contrants.MODE_BREATH)){
+                if(!mCurLedMode.equals(Contrants.MODE_BREATH) && !Contrants.isCycle){
                     lastPointX = lastPointX - 20;
                     brightnessSlideBar.updateSelectorX(lastPointX);
                     colorPickerView.notifyColorChanged();
@@ -372,6 +381,9 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     }
 
     private void switchRecmdColor(int idnex){
+        if(Contrants.isCycle){
+            return;
+        }
         //底部线条
         Contrants.mColorBtnIndex = idnex-1;
         int lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left1);
@@ -473,6 +485,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vGradientIconColor4.setImageResource(R.mipmap.gradient_icon_color4);
             vGradientIconColor5.setImageResource(R.mipmap.gradient_icon_color5);
             vGradientIconColor6.setImageResource(R.mipmap.gradient_icon_color6);
+            Contrants.isCycle = false;  //关闭循环
             vGradientIconColor1.performClick();
         }else if(Contrants.MODE_MUSIC.equals(mode)){  //music
             isMusicMode = true;
