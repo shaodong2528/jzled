@@ -171,6 +171,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vModeBreadh.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
             mCurLedMode = Contrants.MODE_BREATH;
+            brightnessSlideBar.setEnabled(false);  //该模式不支持亮度调节
         }else if(mode.equals(Contrants.MODE_STREAM)){
             vModeWater.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_pipeline));
@@ -290,10 +291,9 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 initLedSwitchStatue();
                 break;
             case R.id.fl_circle_switch_lay: //循环开关
-                //SystemUtils.setProp("persist.circle.switch",mCircleSwitchStatue ? "OFF":"ON");
-                //initCircleStatue();
-                //test
-                startActivity(new Intent(this, LightTestActivity.class));
+                SystemUtils.setProp("persist.circle.switch",mCircleSwitchStatue ? "OFF":"ON");
+                initCircleStatue();
+                //startActivity(new Intent(this, LightTestActivity.class));
                 break;
             case R.id.left_home:
                 finish();
@@ -307,14 +307,18 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 initFocusView();
                 break;
             case R.id.iv_add:
-                lastPointX = lastPointX + 20;
-                brightnessSlideBar.updateSelectorX(lastPointX);
-                colorPickerView.notifyColorChanged();
+                if(!mCurLedMode.equals(Contrants.MODE_BREATH)){
+                    lastPointX = lastPointX + 20;
+                    brightnessSlideBar.updateSelectorX(lastPointX);
+                    colorPickerView.notifyColorChanged();
+                }
                 break;
             case R.id.iv_minus:
-                lastPointX = lastPointX - 20;
-                brightnessSlideBar.updateSelectorX(lastPointX);
-                colorPickerView.notifyColorChanged();
+                if(!mCurLedMode.equals(Contrants.MODE_BREATH)){
+                    lastPointX = lastPointX - 20;
+                    brightnessSlideBar.updateSelectorX(lastPointX);
+                    colorPickerView.notifyColorChanged();
+                }
                 break;
             case R.id.iv_color1:
                 switchRecmdColor(1);
@@ -457,6 +461,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         //循环开关布局
         findViewById(R.id.iv_cycle_line).setVisibility(View.INVISIBLE);
         vCycleSwitchLay.setVisibility(View.INVISIBLE);
+        brightnessSlideBar.setEnabled(true);
         if(Contrants.MODE_GRADIENT.equals(mode)){  //渐变
             isGradientMode = true;
             colorPickerView.setVisibility(View.INVISIBLE);
@@ -468,6 +473,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vGradientIconColor4.setImageResource(R.mipmap.gradient_icon_color4);
             vGradientIconColor5.setImageResource(R.mipmap.gradient_icon_color5);
             vGradientIconColor6.setImageResource(R.mipmap.gradient_icon_color6);
+            vGradientIconColor1.performClick();
         }else if(Contrants.MODE_MUSIC.equals(mode)){  //music
             isMusicMode = true;
             colorPickerView.setVisibility(View.INVISIBLE);
@@ -486,6 +492,10 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vGradientIconColor4.setImageResource(R.mipmap.icon_color_green_4);
             vGradientIconColor5.setImageResource(R.mipmap.icon_color_cyan_5);
             vGradientIconColor6.setImageResource(R.mipmap.icon_color_purple_6);
+            mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
+            if(Contrants.MODE_BREATH.equals(mode)){
+                brightnessSlideBar.setEnabled(false);  //该模式不支持亮度调节
+            }
         }
         //音乐模式时隐藏推荐颜色相关
         findViewById(R.id.tv_recmd_txt).setVisibility(isMusicMode ? View.INVISIBLE :View.VISIBLE);
@@ -510,13 +520,13 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     };
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
+        super.onStop();
         ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
         manager.setColor("MyColorPicker", colorPickerView.getColor());   //保存颜色
         manager.setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
         if(mService != null){
             unbindService(connection);
         }
-        super.onPause();
     }
 }

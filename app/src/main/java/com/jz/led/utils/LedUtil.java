@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.TreeMap;
 
 public class LedUtil extends Binder {
+    //渐变颜色
     private static final ArrayList<String> gradientColor1 = new ArrayList<>(Arrays.asList("DF07FF","A012E2","701CCA","2D2297","192485","7888B0"));
     private static final ArrayList<String> gradientColor2 = new ArrayList<>(Arrays.asList("F005FF","C331FF","9063FF","6F83FF","34BCFF","7BEBFF"));
     private static final ArrayList<String> gradientColor3 = new ArrayList<>(Arrays.asList("02A365","00A651","009E7D","009A92","0097A6","71C3D5"));
@@ -32,6 +33,8 @@ public class LedUtil extends Binder {
         put(4,gradientColor5);
         put(5,gradientColor6);
     }};
+    //单色推荐颜色
+    private static final ArrayList<String> recmdColors = new ArrayList<>(Arrays.asList("F50802","F26103","E39507","2DA71A","1592A3","4307F1"));
     public enum LightMode {
         //正常、闪烁、流水、呼吸、单个开
         NORMAL, BLINK, STREAM, BREATHE, SINGLE,MUSIC
@@ -70,7 +73,8 @@ public class LedUtil extends Binder {
     }
 
     public void turnOnForMode(LightMode mode,ArrayList<String> hexRgbs) {
-        Log.d("===ddd","colors="+hexRgbs+",mode="+mode);
+        SystemUtils.setProp("persist.led.colors",hexRgbs.toString());
+        Log.d("===colors","="+hexRgbs);
         switch (mode) {
             case BLINK:
                 blink(1000,1000,hexRgbs);
