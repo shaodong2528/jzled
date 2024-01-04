@@ -157,7 +157,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         }
         //获取上次保存点的位置
         initLedSwitchStatue();
-        initCircleStatue(false);
+        initCircleStatue();
         String mode = SystemUtils.getProp("persist.current.led.mode","");
         if(mode.equals(Contrants.MODE_SING)){
             vModeSing.setSelected(true);
@@ -211,7 +211,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         }
     }
 
-    private void initCircleStatue(boolean click){
+    private void initCircleStatue(){
         mCircleSwitchStatue = SystemUtils.getProp("persist.circle.switch","OFF").equals("ON");
         vCircleImg.setBackgroundResource(mCircleSwitchStatue ? R.mipmap.switch_on_bg_1920:R.mipmap.switch_off_bg_1920);
         vCircleSwitchLeftPoint.setVisibility(mCircleSwitchStatue ? View.VISIBLE:View.INVISIBLE);
@@ -219,11 +219,24 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         Contrants.isCycle = mCircleSwitchStatue;
         if(Contrants.isCycle){  //该模式下禁用色盘
             colorPickerView.setEnabled(false);
-            if(click && Contrants.MODE_SING.equals(mCurLedMode) || Contrants.MODE_BREATH.equals(mCurLedMode) || Contrants.MODE_STREAM.equals(mCurLedMode)){
-                mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
-            }
+            colorPickerView.setAlpha(0.5f);
+            brightnessSlideBar.setAlpha(0.5f);
+            vGradientIconColor1.setAlpha(0.5f);
+            vGradientIconColor2.setAlpha(0.5f);
+            vGradientIconColor3.setAlpha(0.5f);
+            vGradientIconColor4.setAlpha(0.5f);
+            vGradientIconColor5.setAlpha(0.5f);
+            vGradientIconColor6.setAlpha(0.5f);
         }else{
             colorPickerView.setEnabled(true);
+            colorPickerView.setAlpha(1f);
+            brightnessSlideBar.setAlpha(1f);
+            vGradientIconColor1.setAlpha(1f);
+            vGradientIconColor2.setAlpha(1f);
+            vGradientIconColor3.setAlpha(1f);
+            vGradientIconColor4.setAlpha(1f);
+            vGradientIconColor5.setAlpha(1f);
+            vGradientIconColor6.setAlpha(1f);
         }
     }
 
@@ -301,7 +314,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 break;
             case R.id.fl_circle_switch_lay: //循环开关
                 SystemUtils.setProp("persist.circle.switch",mCircleSwitchStatue ? "OFF":"ON");
-                initCircleStatue(true);
+                initCircleStatue();
+                mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
                 //startActivity(new Intent(this, LightTestActivity.class));
                 break;
             case R.id.left_home:

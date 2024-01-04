@@ -84,7 +84,7 @@ public class LedUtil extends Binder {
                 turnOn(hexRgbs);
                 break;
             case MUSIC:
-                musicSound(100,hexRgbs);
+                musicSound(150,hexRgbs);
                 break;
             case NORMAL:
             default:
