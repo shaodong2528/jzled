@@ -50,4 +50,9 @@ public interface ILight {
      * @param interval 一次呼或者一次吸的时间间隔, 单位毫秒
      */
     public void breathe(int[] rgb, int interval);
+
+    /**
+     * 音谱
+     */
+    public void musicSound(int[] rgb,int interval);
 }

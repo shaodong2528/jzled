@@ -83,6 +83,9 @@ public class LedUtil extends Binder {
             case SINGLE:
                 turnOn(hexRgbs);
                 break;
+            case MUSIC:
+                musicSound(100,hexRgbs);
+                break;
             case NORMAL:
             default:
                 turnOnEach(hexRgbs);
@@ -112,6 +115,15 @@ public class LedUtil extends Binder {
      */
     public void breathe(int breathDuration,ArrayList<String> hexRgbs) {
         Light.getInstance().breathe(getRGBS(hexRgbs), breathDuration);
+    }
+
+    /**
+     * 音谱
+     * @param delay 谱率(毫秒)
+     * @param hexRgbs
+     */
+    public void musicSound(int delay,ArrayList<String> hexRgbs){
+        Light.getInstance().musicSound(getRGBS(hexRgbs), delay);
     }
 
     /**

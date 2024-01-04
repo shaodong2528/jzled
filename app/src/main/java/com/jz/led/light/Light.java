@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Light implements ILight {
     private static final String LED_CTRL_NODE = "/proc/led_ctrl_byte";
@@ -25,6 +26,7 @@ public class Light implements ILight {
     private static final int MODE_BLINK = 1;
     private static final int MODE_STREAM = 2;
     private static final int MODE_BREATHE = 3;
+    private static final int MODE_MUSIC = 4;
 
     private boolean mBlinkOn = false;
     private boolean mBreatheIn = true;
@@ -40,6 +42,7 @@ public class Light implements ILight {
     private static final int MSG_BLINK = 2;
     private static final int MSG_STREAM = 3;
     private static final int MSG_BREATHE = 4;
+    private static final int MSG_MUSIC = 7;
 
     private static final int MSG_TURN_OFF_ONE = 5;
     private static final int MSG_TURN_ON_ONE = 6;
@@ -79,6 +82,9 @@ public class Light implements ILight {
                     case MSG_BREATHE:
                         mHandler.removeMessages(MSG_BREATHE);  //删除之前的
                         handleBreathe((int[]) msg.obj, msg.arg1, msg.arg2);
+                        break;
+                    case MSG_MUSIC:
+                        handMusicSound((int[]) msg.obj, msg.arg1);
                         break;
                     case MSG_TURN_OFF_ONE:
                         handleTurnOffOne(msg.arg1);
@@ -372,6 +378,28 @@ public class Light implements ILight {
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_BREATHE, interval, loopCount, rgbs), delay);
     }
 
+    public void handMusicSound(int[] rgbs,int interval){
+        if (mMode != MODE_MUSIC){
+            return;
+        }
+        for (int i = 0; i < NUMBER_OF_LIGHT; i++) {
+            //随机关灯
+            Random tunOn = new Random();
+            if(tunOn.nextInt(3) == 1){
+                mCmd[i * 3] = (byte) rgbR(rgbs[0]);
+                mCmd[i * 3 + 1] = (byte) rgbG(rgbs[0]);
+                mCmd[i * 3 + 2] = (byte) rgbB(rgbs[0]);
+            }else{
+                mCmd[i * 3] = (byte) rgbR(0x00);
+                mCmd[i * 3 + 1] = (byte) rgbG(0x00);
+                mCmd[i * 3 + 2] = (byte) rgbB(0x00);
+            }
+        }
+        writeCmd(mCmd);
+        Log.d("===zzxd","music "+interval+",color="+rgbs[0]);
+        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_MUSIC,interval,-1,rgbs),interval);
+    }
+
     private void handleTurnOnOne(int rgb, int index) {
         Log.d("===zxd","handleTurnOnOne,"+mMode);
         if (mMode != MODE_NORMAL) return;
@@ -427,6 +455,13 @@ public class Light implements ILight {
     public void breathe(int[] rgb, int interval) {
         mMode = MODE_BREATHE;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_BREATHE, interval, -1, rgb));
+    }
+
+    @Override
+    public void musicSound(int[] rgb, int interval) {
+        mMode = MODE_MUSIC;
+        mHandler.removeMessages(MSG_MUSIC);
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_MUSIC, interval, -1, rgb));
     }
 
     /**

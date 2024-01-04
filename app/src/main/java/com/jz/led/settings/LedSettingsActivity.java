@@ -349,31 +349,26 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 break;
             case R.id.ll_mode_sing:    //单色模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_SING);
-                mCurLedMode = Contrants.MODE_SING;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_monochrome));
                 onAllModeNoSel(vModeSing, Contrants.MODE_SING);
                 break;
             case R.id.ll_mode_gradient: //渐变模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_GRADIENT);
-                mCurLedMode = Contrants.MODE_GRADIENT;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_gradient));
                 onAllModeNoSel(vModeGradient,Contrants.MODE_GRADIENT);
                 break;
             case R.id.ll_mode_breath:   //呼吸模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_BREATH);
-                mCurLedMode = Contrants.MODE_BREATH;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
                 onAllModeNoSel(vModeBreadh,Contrants.MODE_BREATH);
                 break;
             case R.id.ll_mode_water:   //流水模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_STREAM);
-                mCurLedMode = Contrants.MODE_STREAM;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_pipeline));
                 onAllModeNoSel(vModeWater,Contrants.MODE_STREAM);
                 break;
             case R.id.ll_mode_music:  //音谱模式
                 SystemUtils.setProp("persist.current.led.mode",Contrants.MODE_MUSIC);
-                mCurLedMode = Contrants.MODE_MUSIC;
                 vModeName.setText(getResources().getString(R.string.app_led_mode_musical));
                 onAllModeNoSel(vModeMusic,Contrants.MODE_MUSIC);
                 break;
@@ -455,6 +450,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     }
 
     private void onAllModeNoSel(View curView, String mode){
+        mCurLedMode = mode;
         vModeSing.setSelected(false);
         vModeGradient.setSelected(false);
         vModeBreadh.setSelected(false);
@@ -485,13 +481,14 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vGradientIconColor4.setImageResource(R.mipmap.gradient_icon_color4);
             vGradientIconColor5.setImageResource(R.mipmap.gradient_icon_color5);
             vGradientIconColor6.setImageResource(R.mipmap.gradient_icon_color6);
-            Contrants.isCycle = false;  //关闭循环
+            //Contrants.isCycle = false;  //关闭循环
             vGradientIconColor1.performClick();
         }else if(Contrants.MODE_MUSIC.equals(mode)){  //music
             isMusicMode = true;
             colorPickerView.setVisibility(View.INVISIBLE);
             vGradientPan.setVisibility(View.INVISIBLE);
             vMusicBg.setVisibility(View.VISIBLE);
+            mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
         }else {
             //循环开关布局
             findViewById(R.id.iv_cycle_line).setVisibility(View.VISIBLE);

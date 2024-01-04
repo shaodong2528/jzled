@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!--葡萄牙语start-->
-
+    <string name="app_name">Configuração do Led</string>
+    <string name="app_led_switch_txt">Luz ambiente LED</string>
+    <string name="app_led_display_mode">Modo de Exibição</string>
+    <string name="app_led_display_brightness">Brilho do Ecrã</string>
+    <string name="app_led_recomd_color">Cores Recomendadas</string>
+    <string name="app_led_color_cycle">Ciclo de Cores</string>
+    <string name="app_led_mode_monochrome">Modo Monocromático</string>
+    <string name="app_led_mode_gradient">Modo Gradiente</string>
+    <string name="app_led_mode_breathing">Padrão Respiratório</string>
+    <string name="app_led_mode_pipeline">Modo Pipeline</string>
+    <string name="app_led_mode_musical">Groove Musical</string>
     <!--葡萄牙语end-->
 
 </resources>
