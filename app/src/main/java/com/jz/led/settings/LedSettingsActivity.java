@@ -187,6 +187,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
             mCurLedMode = Contrants.MODE_BREATH;
             brightnessSlideBar.setEnabled(false);  //该模式不支持亮度调节
+            brightnessSlideBar.setAlpha(0.5f);
         }else if(mode.equals(Contrants.MODE_STREAM)){
             vModeWater.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_pipeline));
@@ -508,6 +509,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         findViewById(R.id.iv_cycle_line).setVisibility(View.INVISIBLE);
         vCycleSwitchLay.setVisibility(View.INVISIBLE);
         brightnessSlideBar.setEnabled(true);
+        brightnessSlideBar.setAlpha(1f);
         if(Contrants.MODE_GRADIENT.equals(mode)){  //渐变
             isGradientMode = true;
             colorPickerView.setVisibility(View.INVISIBLE);
@@ -544,6 +546,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
             if(Contrants.MODE_BREATH.equals(mode)){
                 brightnessSlideBar.setEnabled(false);  //该模式不支持亮度调节
+                brightnessSlideBar.setAlpha(0.5f);
             }
         }
         //音乐模式时隐藏推荐颜色相关
