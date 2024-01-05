@@ -202,6 +202,10 @@ abstract class AbstractSlider extends FrameLayout {
     colorPickerView.fireColorListener(assembleColor(), false);
   }
 
+  public float getBrightValue(){
+    return selectorPosition;
+  }
+
   public void setSelectorPosition(@FloatRange(from = 0.0, to = 1.0) float selectorPosition) {
     this.selectorPosition = Math.min(selectorPosition, 1.0f);
     float x = (getWidth() * selectorPosition) - getSelectorSize() - getBorderHalfSize();

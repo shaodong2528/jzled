@@ -30,6 +30,7 @@ import com.jz.led.colorpick.preference.ColorPickerPreferenceManager;
 import com.jz.led.light.Light;
 import com.jz.led.utils.Contrants;
 import com.jz.led.utils.LedUtil;
+import com.jz.led.utils.SystemUtil;
 import com.jz.led.utils.SystemUtils;
 import com.jz.led.widget.BrightnessSlideBar;
 
@@ -91,13 +92,21 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
                 if(fromUser){
                     int color = envelope.getColor();
-                    String hexColor = envelope.getHexCode();
+                    String hexColor = envelope.getHexCode();  //ex:FF215D3D
                     int argb[] = envelope.getArgb();
-                    mCurHexColor = hexColor.substring(2,hexColor.length());
+                    mCurHexColor = hexColor.substring(2); //去除前面两位透明度
                     SystemUtils.setProp("persist.save.led.hexcolor",mCurHexColor);
                     vModeName.setTextColor(color);
-                    mService.turnOnForMode(mService.getMode(mCurLedMode),mService.getColors(mCurHexColor,mCurLedMode));
-                    Log.d(TAG,"fromUser="+fromUser+",color="+color+",hexColor="+hexColor+","+mCurHexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]+",thread="+Thread.currentThread().getName());
+                    ArrayList<String> rgbs = mService.getColors(mCurHexColor,mCurLedMode);
+                    if(mCurLedMode.equals(Contrants.MODE_GRADIENT)){  //渐变颜色是固定的，所以需要处理下亮度
+                        //转成当前对应亮度的颜色值
+                        for (int i = 0 ; i < rgbs.size();i++){
+                            String newHexColor = SystemUtil.colorBrightConvert(rgbs.get(i),brightnessSlideBar.getBrightValue());
+                            rgbs.set(i,newHexColor);
+                        }
+                    }
+                    mService.turnOnForMode(mService.getMode(mCurLedMode),rgbs);
+                    Log.d(TAG,"brightValue="+brightnessSlideBar.getBrightValue()+",color="+color+",hexColor="+hexColor+","+mCurHexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]);
                 }
             }
         });
@@ -167,6 +176,12 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vModeGradient.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_gradient));
             mCurLedMode = Contrants.MODE_GRADIENT;
+            //隐藏色盘与音乐图
+            colorPickerView.setVisibility(View.INVISIBLE);
+            vGradientPan.setVisibility(View.VISIBLE);
+            vMusicBg.setVisibility(View.INVISIBLE);
+            findViewById(R.id.iv_cycle_line).setVisibility(View.INVISIBLE);
+            vCycleSwitchLay.setVisibility(View.INVISIBLE);
         }else if(mode.equals(Contrants.MODE_BREATH)){
             vModeBreadh.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_breathing));
@@ -180,12 +195,22 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vModeMusic.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_musical));
             mCurLedMode = Contrants.MODE_MUSIC;
+            colorPickerView.setVisibility(View.INVISIBLE);
+            vGradientPan.setVisibility(View.INVISIBLE);
+            vMusicBg.setVisibility(View.VISIBLE);
+            findViewById(R.id.tv_recmd_txt).setVisibility(View.INVISIBLE);
+            findViewById(R.id.ll_recmd_color_lay).setVisibility(View.INVISIBLE);
+            vBottomSelectLine.setVisibility(View.INVISIBLE);
+            //隐藏循环
+            findViewById(R.id.iv_cycle_line).setVisibility(View.INVISIBLE);
+            vCycleSwitchLay.setVisibility(View.INVISIBLE);
         }
         brightnessSlideBar.postDelayed(new Runnable() {
             @Override
             public void run() {
                 lastPointX = ColorPickerPreferenceManager.getInstance(LedSettingsActivity.this)
                         .getBrightnessSliderPosition("bright",colorPickerView.getSelectedPoint().x);
+                Log.d("----==run","size="+lastPointX);
                 brightnessSlideBar.updateSelectorX(lastPointX);
             }
         }, 200);
@@ -221,23 +246,22 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             colorPickerView.setEnabled(false);
             colorPickerView.setAlpha(0.5f);
             brightnessSlideBar.setAlpha(0.5f);
-            vGradientIconColor1.setAlpha(0.5f);
-            vGradientIconColor2.setAlpha(0.5f);
-            vGradientIconColor3.setAlpha(0.5f);
-            vGradientIconColor4.setAlpha(0.5f);
-            vGradientIconColor5.setAlpha(0.5f);
-            vGradientIconColor6.setAlpha(0.5f);
+            setRecmdColorAlpha(0.5f);
         }else{
             colorPickerView.setEnabled(true);
             colorPickerView.setAlpha(1f);
             brightnessSlideBar.setAlpha(1f);
-            vGradientIconColor1.setAlpha(1f);
-            vGradientIconColor2.setAlpha(1f);
-            vGradientIconColor3.setAlpha(1f);
-            vGradientIconColor4.setAlpha(1f);
-            vGradientIconColor5.setAlpha(1f);
-            vGradientIconColor6.setAlpha(1f);
+            setRecmdColorAlpha(1f);
         }
+    }
+
+    public void setRecmdColorAlpha(float alpha){
+        vGradientIconColor1.setAlpha(alpha);
+        vGradientIconColor2.setAlpha(alpha);
+        vGradientIconColor3.setAlpha(alpha);
+        vGradientIconColor4.setAlpha(alpha);
+        vGradientIconColor5.setAlpha(alpha);
+        vGradientIconColor6.setAlpha(alpha);
     }
 
     @Override
@@ -390,7 +414,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     }
 
     private void switchRecmdColor(int idnex){
-        if(Contrants.isCycle){
+        if(Contrants.isCycle && !mCurLedMode.equals(Contrants.MODE_GRADIENT)){
             return;
         }
         //底部线条
@@ -495,6 +519,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vGradientIconColor4.setImageResource(R.mipmap.gradient_icon_color4);
             vGradientIconColor5.setImageResource(R.mipmap.gradient_icon_color5);
             vGradientIconColor6.setImageResource(R.mipmap.gradient_icon_color6);
+            setRecmdColorAlpha(1f);
             //Contrants.isCycle = false;  //关闭循环
             vGradientIconColor1.performClick();
         }else if(Contrants.MODE_MUSIC.equals(mode)){  //music

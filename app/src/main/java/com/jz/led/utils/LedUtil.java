@@ -35,8 +35,8 @@ public class LedUtil extends Binder {
     }};
 
     public enum LightMode {
-        //正常、闪烁、流水、呼吸、单个开
-        NORMAL, BLINK, STREAM, BREATHE, SINGLE,MUSIC
+        //正常、闪烁、流水、呼吸、单色、音乐、渐变
+        NORMAL, BLINK, STREAM, BREATHE, SINGLE,MUSIC,GRADIENT
     }
 
     public ArrayList<String> getColors(String curHexColor,String curMode){
@@ -58,8 +58,9 @@ public class LedUtil extends Binder {
             case Contrants.MODE_BREATH:
                 return LightMode.BREATHE;
             case Contrants.MODE_SING:
-            case Contrants.MODE_GRADIENT:
                 return LightMode.SINGLE;
+            case Contrants.MODE_GRADIENT:
+                return LightMode.GRADIENT;
             case Contrants.MODE_MUSIC:
                 return LightMode.MUSIC;
             default:
@@ -85,6 +86,9 @@ public class LedUtil extends Binder {
                 break;
             case MUSIC:
                 musicSound(150,hexRgbs);
+                break;
+            case GRADIENT:
+                gradient(hexRgbs);
                 break;
             case NORMAL:
             default:
@@ -124,6 +128,12 @@ public class LedUtil extends Binder {
      */
     public void musicSound(int delay,ArrayList<String> hexRgbs){
         Light.getInstance().musicSound(getRGBS(hexRgbs), delay);
+    }
+    /**
+     * 渐变 同单色
+     */
+    public void gradient(ArrayList<String> hexRgbs){
+        Light.getInstance().gradient(getRGBS(hexRgbs));
     }
 
     /**

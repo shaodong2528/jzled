@@ -55,4 +55,8 @@ public interface ILight {
      * 音谱
      */
     public void musicSound(int[] rgb,int interval);
+    /**
+     * 渐变
+     */
+    public void gradient(int[] rgb);
 }

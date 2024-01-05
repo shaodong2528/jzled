@@ -27,6 +27,7 @@ public class Light implements ILight {
     private static final int MODE_STREAM = 2;
     private static final int MODE_BREATHE = 3;
     private static final int MODE_MUSIC = 4;
+    private static final int MODE_GRADIENT = 5;
 
     private boolean mBlinkOn = false;
     private boolean mBreatheIn = true;
@@ -43,6 +44,7 @@ public class Light implements ILight {
     private static final int MSG_STREAM = 3;
     private static final int MSG_BREATHE = 4;
     private static final int MSG_MUSIC = 7;
+    private static final int MSG_GRADIENT = 8;
 
     private static final int MSG_TURN_OFF_ONE = 5;
     private static final int MSG_TURN_ON_ONE = 6;
@@ -70,6 +72,9 @@ public class Light implements ILight {
                         break;
                     case MSG_TURN_ON:
                         handleTurnOn((int[]) msg.obj);
+                        break;
+                    case MSG_GRADIENT:
+                        handleGradient((int[]) msg.obj);
                         break;
                     case MSG_BLINK:
                         mHandler.removeMessages(MSG_BLINK);//删除之前的
@@ -275,6 +280,14 @@ public class Light implements ILight {
             mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_TURN_ON, -1, -1, rgbs),1000);
         }
     }
+    private void handleGradient(int[] rgbs) {
+        Log.d("===zxd","handleGradient,"+mMode);
+        if (mMode != MODE_GRADIENT) return;
+        for (int i = 0; i < rgbs.length; i++) {
+            updateCmd(rgbs[i], i);
+        }
+        writeCmd(mCmd);
+    }
 
     private void handleBlink(int[] rgbs, int openDuration, int closeDuration) {
         Log.d("===zxdddddd","handleBlink111111111,"+mMode);
@@ -462,6 +475,13 @@ public class Light implements ILight {
         mMode = MODE_MUSIC;
         mHandler.removeMessages(MSG_MUSIC);
         mHandler.sendMessage(mHandler.obtainMessage(MSG_MUSIC, interval, -1, rgb));
+    }
+
+    @Override
+    public void gradient(int[] rgb) {
+        mMode = MODE_GRADIENT;
+        mHandler.removeMessages(MSG_GRADIENT);
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_GRADIENT, -1, -1, rgb));
     }
 
     /**

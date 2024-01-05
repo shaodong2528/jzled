@@ -21,7 +21,7 @@ import androidx.annotation.ColorInt;
 import java.util.Locale;
 
 /** ColorUtils a util class for changing the form of colors. */
-class ColorUtils {
+public class ColorUtils {
   /** changes color to string hex code. */
   public static String getHexCode(@ColorInt int color) {
     int a = Color.alpha(color);

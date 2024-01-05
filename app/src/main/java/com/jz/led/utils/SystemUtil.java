@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -18,6 +19,8 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
+
+import com.jz.led.colorpick.ColorUtils;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -453,4 +456,35 @@ public class SystemUtil {
         String prop = SystemUtils.getProp("persist.isShowNaivWidget", "0");
         return prop.equals("1");
     }
+
+    /**
+     *
+     * @param hexColor   0-1
+     * @param brightValue 00ff00
+     * @return
+     */
+    public static String colorBrightConvert(String hexColor,float brightValue){
+        float[] hsv = new float[3];
+        if(!TextUtils.isEmpty(hexColor)){
+            if(hexColor.startsWith("#")){
+                Color.colorToHSV(Color.parseColor(hexColor), hsv);
+                hsv[2] = brightValue;
+                return colorToHexColor(Color.HSVToColor(hsv));
+            }else{
+                Color.colorToHSV(Color.parseColor("#"+hexColor), hsv);
+                hsv[2] = brightValue;
+                return colorToHexColor(Color.HSVToColor(hsv));
+            }
+        }else{
+            //默认颜色
+            Color.colorToHSV(Color.parseColor("#0000FF"), hsv);
+            hsv[2] = brightValue;
+            return colorToHexColor(Color.HSVToColor(hsv));
+        }
+    }
+
+    public static String colorToHexColor(int color){
+        return ColorUtils.getHexCode(color).substring(2);
+    }
+
 }
