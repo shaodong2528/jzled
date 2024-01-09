@@ -1,5 +1,7 @@
 package com.jz.led.light;
 
+import java.util.ArrayList;
+
 public interface ILight {
     /**
      *  关闭所有灯
@@ -54,7 +56,7 @@ public interface ILight {
     /**
      * 音谱
      */
-    public void musicSound(int[] rgb,int interval);
+    public void musicSound(ArrayList<String> rgbs, int interval);
     /**
      * 渐变
      */

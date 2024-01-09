@@ -132,7 +132,7 @@ public class LedUtil extends Binder {
      * @param hexRgbs
      */
     public void musicSound(int delay,ArrayList<String> hexRgbs){
-        Light.getInstance().musicSound(getRGBS(hexRgbs), delay);
+        Light.getInstance().musicSound(hexRgbs, delay);
     }
     /**
      * 渐变 同单色
