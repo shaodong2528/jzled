@@ -1,5 +1,6 @@
 package com.jz.led.utils;
 
+import android.media.audiofx.Visualizer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -18,6 +19,10 @@ import java.util.Arrays;
 import java.util.TreeMap;
 
 public class LedUtil extends Binder {
+
+    private Visualizer visualizer;
+    private int currentVolume;
+    private float currentFrequency;
     //渐变颜色
     private static final ArrayList<String> gradientColor1 = new ArrayList<>(Arrays.asList("E245FD","A010E2","721CCB","491FAD","2D2297","0D2476"));
     private static final ArrayList<String> gradientColor2 = new ArrayList<>(Arrays.asList("F00DFF","B242FF","8370FF","668BFF","44AEFF","1BD6FF"));
@@ -182,4 +187,50 @@ public class LedUtil extends Binder {
         }
         return rgbs;
     }
+
+    public void musicVisual(){
+        ArrayList<String> hexRgbs = new ArrayList<>();
+        int sid = Integer.valueOf(SystemUtil.getProp("persist.led.music.sid","160"));
+        try {
+            visualizer = new Visualizer(sid);
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(MainApplication.getContext(),"music id error",0).show();
+            return;
+        }
+        visualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+        visualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
+            @Override
+            public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) {
+                Log.i("xiaozhu===", "waveform" + waveform.length+",rate="+samplingRate+",currentVolume="+currentVolume);
+                long v = 0;
+                for (int i = 0; i < waveform.length; i++) {
+                    v += Math.pow(waveform[i], 2);
+                }
+                double volume = 10 * Math.log10(v / (double) waveform.length);
+                currentVolume = (int) volume;
+            }
+
+            @Override
+            public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+                float[] magnitudes = new float[fft.length / 2];
+                int max = 0;
+                for (int i = 0; i < magnitudes.length; i++) {
+                    magnitudes[i] = (float) Math.hypot(fft[2 * i], fft[2 * i + 1]);
+                    if (magnitudes[max] < magnitudes[i]) {
+                        max = i;
+                    }
+                }
+                currentFrequency = max * samplingRate / fft.length;
+                hexRgbs.clear();
+                for (int i = 0 ; i < 6;i++){
+                    hexRgbs.add(SystemUtil.colorBrightConvert("0000FF",(float)(currentFrequency*1.0/1000000)));
+                }
+                Log.i("xiaozhu===", "currentFrequency=" + currentFrequency+",birght="+(float)(currentFrequency*1.0/1000000)+",rgbs="+hexRgbs);
+                musicSound(150,hexRgbs);
+            }
+        }, Visualizer.getMaxCaptureRate() / 2, true, true);
+        visualizer.setEnabled(true);
+    }
+
 }
