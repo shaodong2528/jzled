@@ -96,7 +96,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     int argb[] = envelope.getArgb();
                     mCurHexColor = hexColor.substring(2); //去除前面两位透明度
                     SystemUtils.setProp("persist.save.led.hexcolor",mCurHexColor);
-                    vModeName.setTextColor(color);
+                    //vModeName.setTextColor(color);
                     ArrayList<String> rgbs = mService.getColors(mCurHexColor,mCurLedMode);
                     if(mCurLedMode.equals(Contrants.MODE_GRADIENT)){  //渐变颜色是固定的，所以需要处理下亮度
                         //转成当前对应亮度的颜色值
