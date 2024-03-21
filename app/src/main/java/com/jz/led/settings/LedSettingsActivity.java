@@ -427,7 +427,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan1);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(0));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#FC2E28"));
+                    colorPickerView.setPureColor(Color.parseColor("#FF0000"));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -437,7 +437,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan2);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(1));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#F66202"));
+                    colorPickerView.setPureColor(Color.parseColor("#FF7D00"));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -477,7 +477,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan6);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(5));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#3E02F8"));
+                    colorPickerView.setPureColor(Color.parseColor("#3115C3"));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
