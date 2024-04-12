@@ -253,7 +253,7 @@ public class Light implements ILight {
     }
 
     private void updateCmd(int rgb, int index) {
-        Log.d("===zxd","updateCmd,rgb="+rgb);
+        Log.d("===zxd","updateCmd,rgb="+rgb+",index="+index);
         if (index >= mCmd.length) return;
         mCmd[index * 3] = (byte) rgbR(rgb);
         mCmd[index * 3 + 1] = (byte) rgbG(rgb);
@@ -267,7 +267,7 @@ public class Light implements ILight {
     }
 
     private void handleTurnOn(int[] rgbs) {
-        Log.d("===zxd","handleTurnOn,"+mMode);
+        Log.d("===zxd","handleTurnOn,"+mMode+",size="+rgbs.length);
         if (mMode != MODE_NORMAL) return;
         for (int i = 0; i < rgbs.length; i++) {
             updateCmd(rgbs[i], i);
@@ -340,7 +340,7 @@ public class Light implements ILight {
                 for (int i = 0 ; i < NUMBER_OF_LIGHT;i++){
                     rgbs[i] = cycles[mStreamLoopCount % NUMBER_OF_LIGHT];
                 }
-                Log.d("===zzzddd","streamCount="+mStreamLoopCount+",cycles="+cycles+",rgbs="+rgbs);
+                //Log.d("===zzzddd","streamCount="+mStreamLoopCount+",cycles="+cycles+",rgbs="+rgbs);
             }
         }
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_STREAM, speed, next, rgbs), speed);
@@ -383,7 +383,7 @@ public class Light implements ILight {
             if(Contrants.isCycle){
                 int cycles[] = getRGBS(recmdColors);
                 mBreathHSV = rgbToHSV(cycles[++cycleCount % NUMBER_OF_LIGHT]);
-                Log.d("===zzzddd","recmd cycle "+cycleCount);
+                //Log.d("===zzzddd","recmd cycle "+cycleCount);
             }
             mBreathHSV[2] = 0.01;
         } else {
