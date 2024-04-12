@@ -57,6 +57,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private String mCurHexColor = "0000FF",mCurLedMode = Contrants.MODE_SING;
     private LedUtil mService;
     private String TAG = "==zxd"+LedSettingsActivity.class.getSimpleName();
+    private final String RECMD_COLOR[]={"#FF0000","#FF4500","#F7A002","#2DAE18","#12A3B5","#3115C3"};  //对应推荐下面的颜色值
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -91,6 +92,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             @Override
             public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
                 if(fromUser){
+                    SystemUtils.setProp("persist.recmd.index","-1");
                     int color = envelope.getColor();
                     String hexColor = envelope.getHexCode();  //ex:FF215D3D
                     int argb[] = envelope.getArgb();
@@ -106,6 +108,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                         }
                     }
                     mService.turnOnForMode(mService.getMode(mCurLedMode),rgbs);
+                    ColorPickerPreferenceManager.getInstance(LedSettingsActivity.this).setColor("MyColorPicker", colorPickerView.getColor());   //保存颜色
                     Log.d(TAG,"brightValue="+brightnessSlideBar.getBrightValue()+",color="+color+",hexColor="+hexColor+","+mCurHexColor+",rbgColor="+argb[0]+","+argb[1]+","+argb[2]+","+argb[3]);
                 }
             }
@@ -176,6 +179,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             vModeGradient.setSelected(true);
             vModeName.setText(getResources().getString(R.string.app_led_mode_gradient));
             mCurLedMode = Contrants.MODE_GRADIENT;
+            isGradientMode = true;
+            setRecmdGradientIcon(); //更新底部推荐颜色
             //隐藏色盘与音乐图
             colorPickerView.setVisibility(View.INVISIBLE);
             vGradientPan.setVisibility(View.VISIBLE);
@@ -215,6 +220,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 brightnessSlideBar.updateSelectorX(lastPointX);
             }
         }, 200);
+        //初始化推荐颜色下面的线条显示
+        initCurRecmdLine();
     }
 
     private void initLedSwitchStatue(){
@@ -360,6 +367,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     brightnessSlideBar.updateSelectorX(lastPointX);
                     colorPickerView.notifyColorChanged();
                 }
+                ColorPickerPreferenceManager.getInstance(this).setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
                 break;
             case R.id.iv_minus:
                 if(!mCurLedMode.equals(Contrants.MODE_BREATH) && !Contrants.isCycle){
@@ -367,6 +375,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     brightnessSlideBar.updateSelectorX(lastPointX);
                     colorPickerView.notifyColorChanged();
                 }
+                ColorPickerPreferenceManager.getInstance(this).setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
                 break;
             case R.id.iv_color1:
                 switchRecmdColor(1);
@@ -427,7 +436,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan1);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(0));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#FF0000"));
+                    colorPickerView.setPureColor(Color.parseColor(RECMD_COLOR[0]));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -437,7 +446,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan2);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(1));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#FF7D00"));
+                    colorPickerView.setPureColor(Color.parseColor(RECMD_COLOR[1]));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -447,7 +456,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan3);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(2));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#F7A002"));
+                    colorPickerView.setPureColor(Color.parseColor(RECMD_COLOR[2]));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -457,7 +466,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan4);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(3));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#2DAE18"));
+                    colorPickerView.setPureColor(Color.parseColor(RECMD_COLOR[3]));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -467,7 +476,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan5);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(4));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#12A3B5"));
+                    colorPickerView.setPureColor(Color.parseColor(RECMD_COLOR[4]));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -477,7 +486,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                     vGradientPan.setImageResource(R.mipmap.gradient_sepan6);
                     mService.turnOnForMode(mService.getMode(mCurLedMode),mService.colorsMap.get(5));
                 }else{
-                    colorPickerView.setPureColor(Color.parseColor("#3115C3"));
+                    colorPickerView.setPureColor(Color.parseColor(RECMD_COLOR[5]));
                     colorPickerView.notifyColorChanged();
                 }
                 break;
@@ -486,6 +495,13 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         RelativeLayout.LayoutParams bottomLine = (RelativeLayout.LayoutParams) vBottomSelectLine.getLayoutParams();
         bottomLine.setMarginStart(lineMarStart);
         vBottomSelectLine.setLayoutParams(bottomLine);
+        //保存当前选择颜色索引,延时保存
+        vAdd.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SystemUtils.setProp("persist.recmd.index",idnex+"");
+            }
+        },500);
     }
 
     private void onAllModeNoSel(View curView, String mode){
@@ -515,12 +531,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             colorPickerView.setVisibility(View.INVISIBLE);
             vGradientPan.setVisibility(View.VISIBLE);
             vMusicBg.setVisibility(View.INVISIBLE);
-            vGradientIconColor1.setImageResource(R.mipmap.gradient_icon_color1);
-            vGradientIconColor2.setImageResource(R.mipmap.gradient_icon_color2);
-            vGradientIconColor3.setImageResource(R.mipmap.gradient_icon_color3);
-            vGradientIconColor4.setImageResource(R.mipmap.gradient_icon_color4);
-            vGradientIconColor5.setImageResource(R.mipmap.gradient_icon_color5);
-            vGradientIconColor6.setImageResource(R.mipmap.gradient_icon_color6);
+            setRecmdGradientIcon();
             setRecmdColorAlpha(1f);
             //Contrants.isCycle = false;  //关闭循环
             vGradientIconColor1.performClick();
@@ -574,11 +585,55 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     @Override
     protected void onStop() {
         super.onStop();
-        ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
-        manager.setColor("MyColorPicker", colorPickerView.getColor());   //保存颜色
-        manager.setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
+        //ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
+        //manager.setColor("MyColorPicker", colorPickerView.getColor());   //保存颜色
+        //manager.setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
         if(mService != null){
             unbindService(connection);
         }
+    }
+    //线条位置初始化
+    private void initCurRecmdLine(){
+        if(Contrants.isCycle && !mCurLedMode.equals(Contrants.MODE_GRADIENT)){
+            return;
+        }
+        int index = Integer.valueOf(SystemUtils.getProp("persist.recmd.index","-1"));
+        int lineMarStart = 0;
+        switch(index){
+            case 1:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left1);
+                break;
+            case 2:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left2);
+                break;
+            case 3:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left3);
+                break;
+            case 4:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left4);
+                break;
+            case 5:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left5);
+                break;
+            case 6:
+                lineMarStart = getResources().getDimensionPixelOffset(R.dimen.bottom_line_mar_left6);
+                break;
+        }
+        if(lineMarStart != 0){
+            RelativeLayout.LayoutParams bottomLine = (RelativeLayout.LayoutParams) vBottomSelectLine.getLayoutParams();
+            bottomLine.setMarginStart(lineMarStart);
+            vBottomSelectLine.setLayoutParams(bottomLine);
+        }else{
+            vBottomSelectLine.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setRecmdGradientIcon(){
+        vGradientIconColor1.setImageResource(R.mipmap.gradient_icon_color1);
+        vGradientIconColor2.setImageResource(R.mipmap.gradient_icon_color2);
+        vGradientIconColor3.setImageResource(R.mipmap.gradient_icon_color3);
+        vGradientIconColor4.setImageResource(R.mipmap.gradient_icon_color4);
+        vGradientIconColor5.setImageResource(R.mipmap.gradient_icon_color5);
+        vGradientIconColor6.setImageResource(R.mipmap.gradient_icon_color6);
     }
 }
