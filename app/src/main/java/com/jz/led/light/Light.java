@@ -309,7 +309,7 @@ public class Light implements ILight {
     }
 
     private void handleStream(int[] rgbs, int speed, int index) {
-        Log.d("===zxdddddd","handleStream22222222222222,"+mMode);
+        //Log.d("===zxdddddd","handleStream22222222222222,"+mMode);
         if (mMode != MODE_STREAM) return;
 
         if (index < 0) {
@@ -347,7 +347,7 @@ public class Light implements ILight {
     }
 
     private void handleBreathe(int[] rgbs, int interval, int loopCount) {
-        Log.d("===zxdddddd","handleBreathe33333333333,"+mMode);
+        //Log.d("===zxdddddd","handleBreathe33333333333,"+mMode);
         if (mMode != MODE_BREATHE) return;
 
         Log.d(TAG, "handleBreathe loop count " + loopCount);

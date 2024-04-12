@@ -69,6 +69,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     @Override
     protected void initUI() {
         findViewById(R.id.left_home).setOnClickListener(this);
+        findViewById(R.id.tv_title).setOnClickListener(this);
         //led开关
         vLedSwitchLay = findViewById(R.id.fl_led_switch_lay);
         vLedSwitchLay.setOnClickListener(this);
@@ -353,6 +354,10 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             case R.id.left_home:
                 finish();
                 break;
+            case R.id.tv_title:
+                //测试界面
+                startActivity(new Intent(this, LightTestActivity.class));
+                break;
             case R.id.ll_mode:  //mode
                 if(vModeList.getVisibility() == View.VISIBLE){
                     vModeList.setVisibility(View.GONE);
@@ -583,15 +588,13 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     };
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        //ColorPickerPreferenceManager manager = ColorPickerPreferenceManager.getInstance(this);
-        //manager.setColor("MyColorPicker", colorPickerView.getColor());   //保存颜色
-        //manager.setBrightnessSliderPosition("bright", lastPointX);  //保存亮度
+    protected void onDestroy() {
+        super.onDestroy();
         if(mService != null){
             unbindService(connection);
         }
     }
+
     //线条位置初始化
     private void initCurRecmdLine(){
         if(Contrants.isCycle && !mCurLedMode.equals(Contrants.MODE_GRADIENT)){

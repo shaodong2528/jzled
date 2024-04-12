@@ -19,6 +19,7 @@
         android:layout_width="@dimen/xxx805"
         android:layout_height="@dimen/yyy720">
         <TextView
+            android:id="@+id/tv_title"
             android:text="@string/app_name"
             android:paddingStart="@dimen/xxx40"
             android:layout_marginTop="@dimen/yyy24"
