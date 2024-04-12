@@ -57,7 +57,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     private String mCurHexColor = "0000FF",mCurLedMode = Contrants.MODE_SING;
     private LedUtil mService;
     private String TAG = "==zxd"+LedSettingsActivity.class.getSimpleName();
-    private final String RECMD_COLOR[]={"#FF0000","#FF4500","#F7A002","#2DAE18","#12A3B5","#3115C3"};  //对应推荐下面的颜色值
+    private final String RECMD_COLOR[]={"#FF0000","#D75C0D","#F7A002","#2DAE18","#12A3B5","#3115C3"};  //对应推荐下面的颜色值
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -93,6 +93,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
             @Override
             public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
                 if(fromUser){
+                    SystemUtils.getProp("persist.led.first","false");
                     SystemUtils.setProp("persist.recmd.index","-1");
                     int color = envelope.getColor();
                     String hexColor = envelope.getHexCode();  //ex:FF215D3D
@@ -429,6 +430,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
     }
 
     private void switchRecmdColor(int idnex){
+        SystemUtils.getProp("persist.led.first","false");
         if(Contrants.isCycle && !mCurLedMode.equals(Contrants.MODE_GRADIENT)){
             return;
         }

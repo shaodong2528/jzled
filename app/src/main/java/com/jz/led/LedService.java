@@ -32,7 +32,9 @@ public class LedService extends Service {
     private void initLed(){
         //是否打开Led灯
         String ledEnable = SystemUtils.getProp("persist.led.switch","OFF");
-        if(ledEnable.equals("ON")){
+        //是否首次运行
+        boolean first = SystemUtils.getProp("persist.led.first","true").equals("true");
+        if(ledEnable.equals("ON")||first){
             //是否开启循环
             Contrants.isCycle = SystemUtils.getProp("persist.circle.switch","OFF").equals("ON");
             String colors = SystemUtils.getProp("persist.led.colors","[0000FF,0000FF,0000FF,0000FF,0000FF,0000FF]");
