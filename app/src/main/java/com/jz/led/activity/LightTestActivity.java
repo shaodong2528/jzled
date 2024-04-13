@@ -80,7 +80,7 @@ public class LightTestActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        turnOff();
+        //turnOff();
     }
 
     private int[] getRGBS() {
