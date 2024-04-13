@@ -219,11 +219,19 @@ public class Light implements ILight {
 
     private void writeCmd(byte[] cmd) {
         Log.d(TAG, "writeRGB, cmd: " + encodeHexString(cmd));
-
-        try (FileOutputStream out = new FileOutputStream(LED_CTRL_NODE)) {
+        FileOutputStream out = null ;
+        try {
+            out = new FileOutputStream(LED_CTRL_NODE);
             out.write(cmd);
+            out.flush();
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            try {
+                out.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
