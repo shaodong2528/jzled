@@ -81,10 +81,10 @@ public class LedUtil extends Binder {
                 blink(1000,1000,hexRgbs);
                 break;
             case STREAM:
-                stream(100,hexRgbs);
+                stream(115,hexRgbs);
                 break;
             case BREATHE:
-                breathe(1500,hexRgbs);
+                breathe(1600,hexRgbs);
                 break;
             case SINGLE:
                 turnOn(hexRgbs);

@@ -59,7 +59,7 @@ public class Light implements ILight {
     private static final Light mLight = new Light();
     private int cycleCount = 0;
     //单色推荐颜色
-    private final ArrayList<String> recmdColors = new ArrayList<>(Arrays.asList("F50802","F26103","E39507","2DA71A","1592A3","4307F1"));
+    private final ArrayList<String> recmdColors = new ArrayList<>(Arrays.asList("800080","FF0000","D75C0D","2DAE18","12A3B5","3115C3"));
 
     private Light() {
         mHandlerThread = new HandlerThread("light-service");
@@ -251,7 +251,7 @@ public class Light implements ILight {
     }
 
     private void lightOn(int rgb) {
-        Log.d("===zxd","lightOn,rgb="+rgb);
+        //Log.d("===zxd","lightOn,rgb="+rgb);
         for (int i = 0; i < NUMBER_OF_LIGHT; i++) {
             mCmd[i * 3] = (byte) rgbR(rgb);
             mCmd[i * 3 + 1] = (byte) rgbG(rgb);
@@ -261,7 +261,7 @@ public class Light implements ILight {
     }
 
     private void updateCmd(int rgb, int index) {
-        Log.d("===zxd","updateCmd,rgb="+rgb+",index="+index);
+        //Log.d("===zxd","updateCmd,rgb="+rgb+",index="+index);
         if (index >= mCmd.length) return;
         mCmd[index * 3] = (byte) rgbR(rgb);
         mCmd[index * 3 + 1] = (byte) rgbG(rgb);

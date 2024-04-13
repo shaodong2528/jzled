@@ -165,7 +165,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_color1"
-                android:src="@mipmap/icon_color_red_1"
+                android:src="@mipmap/icon_color_7"
                 android:layout_marginStart="@dimen/xxx10"
                 android:background="@drawable/color_item_selector"
                 android:paddingTop="@dimen/yyy2"
@@ -176,7 +176,7 @@
                 android:paddingTop="@dimen/yyy2"
                 android:layout_marginStart="@dimen/xxx23"
                 android:background="@drawable/color_item_selector"
-                android:src="@mipmap/icon_color_orange_2"
+                android:src="@mipmap/icon_color_red_1"
                 android:layout_width="@dimen/xxx95"
                 android:layout_height="@dimen/yyy96"/>
             <ImageView
