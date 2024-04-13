@@ -241,6 +241,8 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
         vLedSwitchRightPoint.setVisibility(mLedSwitchStatue ? View.INVISIBLE:View.VISIBLE);
         if(mLedSwitchStatue){
 
+        }else if(SystemUtils.getProp("persist.led.first","true").equals("true")){
+            //第一次
         }else{
             Light.getInstance().turnOff(); //关闭所有灯
         }
@@ -499,6 +501,7 @@ public class LedSettingsActivity extends BasicActivity implements View.OnClickLi
                 break;
         }
         //更新线条位置
+        vBottomSelectLine.setVisibility(View.VISIBLE);
         RelativeLayout.LayoutParams bottomLine = (RelativeLayout.LayoutParams) vBottomSelectLine.getLayoutParams();
         bottomLine.setMarginStart(lineMarStart);
         vBottomSelectLine.setLayoutParams(bottomLine);
